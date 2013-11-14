@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TripleStore1" xml:space="preserve">
+    <value>@prefix xml: &lt;http://www.w3.org/XML/1998/namespace&gt; .
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix cat: &lt;http://my.web/catalogues#&gt; .
+@prefix cp: &lt;http://my.web/catalogues/predicates/&gt; .
+@prefix el: &lt;http://my.web/catalogues/elements#&gt; .
+#@prefix prop: &lt;http://my.web/catalogues/properties/&gt; .
+
+cat:c1 a cat:catalogue .
+cat:c1 cp:name "Catalogue1" .
+cat:c1 cp:code "cat1" .
+cp:c1p1 a rdf:Property .
+cp:c1p1 cp:name "Property1" .
+cp:c1p1 cp:code "c1p1" .
+cp:c1p2 a rdf:Property .
+cp:c1p2 cp:name "Property2" .
+cp:c1p2 cp:code "c1p2" .
+cp:c1p3 a rdf:Property .
+cp:c1p3 cp:name "Property3" .
+cp:c1p3 cp:code "c1p3" .
+cp:c1p3 cp:default "DefaultValue_Prop3" .
+cp:c1p4 a rdf:Property .
+cp:c1p4 cp:name "Property4" .
+cp:c1p4 cp:code "c1p4" .
+cp:p5 a cp:sharedproperty .
+cp:sharedproperty rdfs:subPropertyOf rdf:Property .
+cp:p5 cp:name "SharedProperty5" .
+cp:p5 cp:code "p5" .
+cp:p5 cp:default "DefaultShared_Prop5" .
+
+cat:c1 cp:has cp:c1p1 .
+cat:c1 cp:has cp:c1p2 .
+cat:c1 cp:has cp:c1p3 .
+cat:c1 cp:has cp:p5 .
+el:c1e1 a el:element .
+el:c1e1 cp:name "c1e1_name" .
+el:c1e1 cp:code "c1e1_code" .
+el:c1e1 cp:c1p1 "c1e1_prop1val" .
+el:c1e1 cp:c1p2 "c1e1_prop2val" .
+el:c1e1 cp:c1p3 "c1e1_prop3val" .
+el:c1e1 cp:c1p4 "c1e1_prop4val" .
+el:c1e1 cp:p5 "c1e1_prop5val" .
+el:c1e2 a el:element .
+el:c1e2 cp:name "c1e2_name" .
+el:c1e2 cp:code "c1e2_code" .
+el:c1e2 cp:c1p1 "c1e1_prop1val" .
+el:c1e2 cp:c1p2 "c1e1_prop2val" .
+el:c1e3 a el:element .
+el:c1e3 cp:name "c1e3_name" .
+el:c1e3 cp:code "c1e3_code" .
+el:c1e3 cp:c1p3 "c1e3_prop3val" .
+el:c1e3 cp:c1p4 "c1e3_prop4val" .
+el:c1e3 cp:p5 "c1e3_prop5val" .
+cat:c1 cp:has el:c1e1 .
+cat:c1 cp:has el:c1e2 .
+cat:c1 cp:has el:c1e3 .
+
+cat:c2 a cat:catalogue .
+cat:c2 cp:name "Catalogue2" .
+el:c2e1 a el:element .
+el:c2e1 cp:name "c2e1_name" .
+el:c2e1 cp:code "c2e1_code" .
+el:c2e1 cp:p5 "c2e1_prop5val" .
+cat:c2 cp:has cp:p5 .
+cat:c2 cp:has el:c2e1 .</value>
+  </data>
+</root>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>VDS.Common</id>
+    <version>1.2.0</version>
+    <title>VDS.Common</title>
+    <authors>RobVesse, kal_ahmed</authors>
+    <owners>RobVesse, kal_ahmed</owners>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>http://bitbucket.org/rvesse/vds-common</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A library containing useful data structures like Trees, Tries and indexing tailored dictionaries.</description>
+    <releaseNotes>- Extract ITrie interface
+      - Add Contains() and ContainsKey() methods to ITrie
+      - Add alternative ITrie implemenations: SparseReferenceTrie, SparseValueTrie, SparseCharacterTrie, SparseStringTrie
+      - Bug fix to problem where enumerating over a Trie would not reflect latest state of tree
+      - Bug fix to logic error in TryGetValue() on Tries
+      - Null Keys support for MultiDictionary must now be explicitly configured, mark constructors calls which should be updated as Obsolete</releaseNotes>
+    <tags>Data Structures Tree Trie AVL Scapegoat Dictionary Collections</tags>
+  </metadata>
+</package>
