@@ -130,11 +130,20 @@ namespace DynamicSPARQLSpace
         /// <summary>
         /// Makes filter graph pattern
         /// </summary>
-        /// <param name="Filter"></param>
+        /// <param name="filter"></param>
         /// <returns></returns>
-        public static Filter Filter(string Filter)
+        public static Filter Filter(string filter)
         {
-            return new Filter { FILTER = Filter };
+            return new Filter { FILTER = filter };
+        }
+        /// <summary>
+        /// Makes bind pattern
+        /// </summary>
+        /// <param name="bind">bind expression</param>
+        /// <returns>bind pattern</returns>
+        public static Bind Bind(string bind)
+        {
+            return new Bind { BIND = bind };
         }
 
         public static string AutoquoteSPARQL(this string val)

@@ -111,6 +111,12 @@ namespace DynamicSPARQLSpace
                     case "offset":
                         offset = args[i].ToString();
                         break;
+                    case "groupby":
+                        groupBy = args[i].ToString();
+                        break;
+                    case "having":
+                        having = args[i].ToString();
+                        break;
                 }
             }
 

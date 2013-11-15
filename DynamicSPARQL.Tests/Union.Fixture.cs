@@ -24,7 +24,7 @@ namespace DynamicSPARQLSpace.Tests
         }
 
 
-        [Theory(DisplayName = "Optional Pattern Matching"),
+        [Theory(DisplayName = "Alternative Matching"),
         InlineData(@"@prefix dc10:  <http://purl.org/dc/elements/1.0/> .
             @prefix dc11:  <http://purl.org/dc/elements/1.1/> .
 
@@ -36,7 +36,7 @@ namespace DynamicSPARQLSpace.Tests
 
             _:c  dc10:title     ""SPARQL"" .
             _:c  dc11:title     ""SPARQL (updated)"" .")]
-        public void TestOptional1(string data)
+        public void TestUnion1(string data)
         {
             var dyno = GetDyno(data);
 

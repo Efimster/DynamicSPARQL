@@ -15,6 +15,8 @@ namespace DynamicSPARQLSpace
         Group,
         Union,
         Filter,
+        Bind,
+        Minus,
         None
     }
 }

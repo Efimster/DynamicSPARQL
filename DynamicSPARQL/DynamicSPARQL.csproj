@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bind.cs" />
     <Compile Include="DynamicObject.cs" />
     <Compile Include="DynamicSPARQL.cs" />
     <Compile Include="DynamicSPARQLHelper.cs" />
