@@ -70,7 +70,7 @@
     <Compile Include="Filter.Fixture.cs" />
     <Compile Include="GroupBy.Fixture.cs" />
     <Compile Include="Limit.Fixture.cs" />
-    <Compile Include="Minus.Fixture.cs" />
+    <Compile Include="Negation.Fixture.cs" />
     <Compile Include="Optional.Fixture.cs" />
     <Compile Include="OrderBy.Fixture.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

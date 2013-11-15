@@ -145,6 +145,113 @@ namespace DynamicSPARQLSpace
         {
             return new Bind { BIND = bind };
         }
+        /// <summary>
+        /// Makes a "MINUS" filter expression
+        /// </summary>
+        /// <param name="S">Subject of first triple</param>
+        /// <param name="P">Predicate of first triple</param>
+        /// <param name="O">Object of first triple</param>
+        /// <returns>"MINUS" filter expression</returns>
+        public static Minus Minus(string S = null, string P = null, string O = null)
+        {
+            var minus = new Minus();
+            minus.Items = new[] { new Triple { Subject = S, Property = P, Object = O } };
+            return minus;
+        }
+        /// <summary>
+        /// Makes an "MINUS" filter expression
+        /// </summary>
+        /// <param name="triple">first triple</param>
+        /// <returns>"MINUS" filter expression</returns>
+        public static Minus Minus(string triple)
+        {
+            IList<string> list = triple.SplitExt(" ").ToArray();
+            if (list.Count != 3)
+                throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
+
+            return Minus(S: list[0], P: list[1], O: list[2]);
+        }
+        /// <summary>
+        /// Makes a "MINUS" filter expression
+        /// </summary>
+        /// <param name="Items">items</param>
+        /// <returns>"MINUS" filter expression</returns>
+        public static Minus Minus(params IWhereItem[] Items)
+        {
+            return new Minus { Items = Items };
+        }
+
+        /// <summary>
+        /// Makes a "EXISTS" filter expression
+        /// </summary>
+        /// <param name="S">Subject of first triple</param>
+        /// <param name="P">Predicate of first triple</param>
+        /// <param name="O">Object of first triple</param>
+        /// <returns>"EXISTS" filter expression</returns>
+        public static Exists Exists(string S = null, string P = null, string O = null)
+        {
+            var exists = new Exists();
+            exists.Items = new[] { new Triple { Subject = S, Property = P, Object = O } };
+            return exists;
+        }
+        /// <summary>
+        /// Makes a "EXISTS" filter expression
+        /// </summary>
+        /// <param name="triple">first triple</param>
+        /// <returns>"EXISTS" filter expression</returns>
+        public static Exists Exists(string triple)
+        {
+            IList<string> list = triple.SplitExt(" ").ToArray();
+            if (list.Count != 3)
+                throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
+
+            return Exists(S: list[0], P: list[1], O: list[2]);
+        }
+        /// <summary>
+        /// Makes a "EXISTS" filter expression
+        /// </summary>
+        /// <param name="Items">items</param>
+        /// <returns>"EXISTS" filter expression</returns>
+        public static Exists Exists(params IWhereItem[] Items)
+        {
+            return new Exists { Items = Items };
+        }
+        /// <summary>
+        /// Makes a "NOT EXISTS" filter expression
+        /// </summary>
+        /// <param name="S">Subject of first triple</param>
+        /// <param name="P">Predicate of first triple</param>
+        /// <param name="O">Object of first triple</param>
+        /// <returns>"NOT EXISTS" filter expression</returns>
+        public static NotExists NotExists(string S = null, string P = null, string O = null)
+        {
+            var notExists = new NotExists();
+            notExists.Items = new[] { new Triple { Subject = S, Property = P, Object = O } };
+            return notExists;
+        }
+        /// <summary>
+        /// Makes a "NOT EXISTS" filter expression
+        /// </summary>
+        /// <param name="triple">first triple</param>
+        /// <returns>"NOT EXISTS" filter expression</returns>
+        public static NotExists NotExists(string triple)
+        {
+            IList<string> list = triple.SplitExt(" ").ToArray();
+            if (list.Count != 3)
+                throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
+
+            return NotExists(S: list[0], P: list[1], O: list[2]);
+        }
+        /// <summary>
+        /// Makes a "NOT EXISTS" filter expression
+        /// </summary>
+        /// <param name="Items">items</param>
+        /// <returns>"NOT EXISTS" filter expression</returns>
+        public static NotExists NotExists(params IWhereItem[] Items)
+        {
+            return new NotExists { Items = Items };
+        }
+
 
         public static string AutoquoteSPARQL(this string val)
         {

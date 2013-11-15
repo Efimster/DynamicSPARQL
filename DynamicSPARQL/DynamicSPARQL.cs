@@ -48,6 +48,7 @@ namespace DynamicSPARQLSpace
         {
             QueringFunc = queringFunc;
             AutoQuotation = autoquotation;
+            TreatUri = treatUri;
             Prefixes = prefixes == null ? new List<Prefix>(5) : new List<Prefix>(prefixes);
         }
 
@@ -87,6 +88,9 @@ namespace DynamicSPARQLSpace
             string offset = string.Empty;
             string groupBy = string.Empty;
             string having = string.Empty;
+            //string minus = string.Empty;
+            //string exists = string.Empty;
+            //string notExists = string.Empty;
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -117,6 +121,16 @@ namespace DynamicSPARQLSpace
                     case "having":
                         having = args[i].ToString();
                         break;
+                    //case "minus":
+                    //    minus = args[i].ToString();
+                    //    break;
+                    //case "exists":
+                    //    exists = args[i].ToString();
+                    //    break;
+                    //case "notexists":
+                    //    notExists = args[i].ToString();
+                    //    break;
+
                 }
             }
 
@@ -140,7 +154,14 @@ namespace DynamicSPARQLSpace
         /// <param name="limit">SPARQL "limit" statement</param>
         /// <param name="offset">SPARQL "offset" statement</param>
         /// <returns>enumeration of result objects</returns>
-        public IEnumerable<T> Select<T>(IEnumerable<Prefix> prefixes = null, string projection = null, Group where = null, string orderBy = null, string groupBy = null, string having = null, string limit = null, string offset = null)
+        public IEnumerable<T> Select<T>(IEnumerable<Prefix> prefixes = null, 
+            string projection = null, 
+            Group where = null, 
+            string orderBy = null, 
+            string groupBy = null, 
+            string having = null, 
+            string limit = null, 
+            string offset = null)
         {
             projection = string.Concat("SELECT", " ", string.IsNullOrEmpty(projection) ? "*" : projection);
             orderBy = !string.IsNullOrEmpty(orderBy) ? "ORDER BY " + orderBy : string.Empty;
@@ -235,7 +256,7 @@ namespace DynamicSPARQLSpace
             {
                 var uri = (node as IUriNode).Uri;
 
-                if (!TreatUri || string.IsNullOrEmpty(uri.Authority))
+                if (!TreatUri || string.IsNullOrEmpty(uri.LocalPath))
                     return uri.ToString();
                 
 

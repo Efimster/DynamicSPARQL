@@ -17,6 +17,8 @@ namespace DynamicSPARQLSpace
         Filter,
         Bind,
         Minus,
+        Exists,
+        NotExists,
         None
     }
 }

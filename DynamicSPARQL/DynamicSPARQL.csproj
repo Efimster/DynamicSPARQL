@@ -59,9 +59,12 @@
     <Compile Include="DynamicObject.cs" />
     <Compile Include="DynamicSPARQL.cs" />
     <Compile Include="DynamicSPARQLHelper.cs" />
+    <Compile Include="Exists.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="IWhereItem.cs" />
+    <Compile Include="Minus.cs" />
+    <Compile Include="NotExists.cs" />
     <Compile Include="Optional.cs" />
     <Compile Include="Prefix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
