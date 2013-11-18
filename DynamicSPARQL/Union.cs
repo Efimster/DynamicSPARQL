@@ -24,6 +24,9 @@ namespace DynamicSPARQLSpace
 
         public override StringBuilder AppendToString(StringBuilder sb, bool autoQuotation = false)
         {
+            if (Right == null)
+                throw new MissingMemberException("Union right part is missing");
+            
             sb = Left.AppendToString(sb, autoQuotation);
             sb.AppendLine("UNION");
             Right.AppendToString(sb, autoQuotation);

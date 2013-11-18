@@ -12,7 +12,7 @@ namespace DynamicSPARQLSpace.Tests
 {
     public class GroupByFixture
     {
-                private static dynamic GetDyno(string data, bool autoquotation = true)
+        private static dynamic GetDyno(string data, bool autoquotation = true)
         {
             var graph = new Graph();
             graph.LoadFromString(data);
@@ -50,7 +50,7 @@ namespace DynamicSPARQLSpace.Tests
                     SPARQL.Tripple("?book :price ?lprice")
                 ),
                 groupBy:"?org",
-                having: "(SUM(?lprice) > 10)"
+                having: "SUM(?lprice) > 10"
 
             );
 

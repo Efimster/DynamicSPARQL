@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DynamicSPARQL")]
 [assembly: AssemblyDescription("Helps making SPARQ queries to RDF sources")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Efim Goncharuk")]
+[assembly: AssemblyCompany("Efimster")]
 [assembly: AssemblyProduct("DynamicSPARQL")]
-[assembly: AssemblyCopyright("Efimster")]
+[assembly: AssemblyCopyright("Efimster@gmail.com")]
 [assembly: AssemblyTrademark("Copyright 2013 (c) Efimster")]
 [assembly: AssemblyCulture("")]
 

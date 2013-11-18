@@ -169,7 +169,7 @@ namespace DynamicSPARQLSpace
             limit = !string.IsNullOrEmpty(limit) ? "LIMIT " + limit : string.Empty;
             offset = !string.IsNullOrEmpty(offset) ? "OFFSET " + offset : string.Empty;
             groupBy = !string.IsNullOrEmpty(groupBy) ? "GROUP BY " + groupBy : string.Empty;
-            having = !string.IsNullOrEmpty(having) ? "HAVING " + having : string.Empty;
+            having = !string.IsNullOrEmpty(having) ? string.Concat("HAVING (",having,")") : string.Empty;
             prefixes = prefixes == null ? new Prefix[] {} : prefixes;
             var prefixesStr = (Prefixes.Concat(prefixes)).GetPrefixesString();
 
