@@ -15,13 +15,13 @@ namespace DynamicSPARQLSpace
         /// <summary>
         /// Makes triple
         /// </summary>
-        /// <param name="S">Subject</param>
-        /// <param name="P">Predicate</param>
-        /// <param name="O">Object</param>
+        /// <param name="s">Subject</param>
+        /// <param name="p">Predicate</param>
+        /// <param name="o">Object</param>
         /// <returns>triple</returns>
-        public static Triple Tripple(string S = null, dynamic P = null, dynamic O = null)
+        public static Triple Tripple(string s = null, dynamic p = null, dynamic o = null)
         {
-            return new Triple() { Subject = S, Property = P, Object = O };
+            return new Triple() { Subject = s, Property = p, Object = o };
         }
         /// <summary>
         /// Makes triple
@@ -48,14 +48,14 @@ namespace DynamicSPARQLSpace
         /// <summary>
         /// Makes an optional graph pattern
         /// </summary>
-        /// <param name="S">Subject of first triple</param>
-        /// <param name="P">Predicate of first triple</param>
-        /// <param name="O">Object of first triple</param>
+        /// <param name="s">Subject of first triple</param>
+        /// <param name="p">Predicate of first triple</param>
+        /// <param name="o">Object of first triple</param>
         /// <returns>optional graph pattern</returns>
-        public static Optional Optional(string S = null, string P = null, string O = null)
+        public static Optional Optional(string s = null, string p = null, string o = null)
         {
             var optional = new Optional();
-            optional.Items = new[] { new Triple { Subject = S, Property = P, Object = O } };
+            optional.Items = new[] { new Triple { Subject = s, Property = p, Object = o } };
             return optional;
         }
         /// <summary>
@@ -69,45 +69,45 @@ namespace DynamicSPARQLSpace
             if (list.Count != 3)
                 throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
 
-            return Optional ( S: list[0], P: list[1], O: list[2] );
+            return Optional ( s: list[0], p: list[1], o: list[2] );
         }
         /// <summary>
         /// Makes an optional graph pattern
         /// </summary>
-        /// <param name="Items">optional graph pattern items</param>
+        /// <param name="items">optional graph pattern items</param>
         /// <returns>optional graph pattern</returns>
-        public static Optional Optional(params IWhereItem[] Items)
+        public static Optional Optional(params IWhereItem[] items)
         {
-            return new Optional { Items = Items };
+            return new Optional { Items = items };
         }
         /// <summary>
         /// Makes Union graph pattern
         /// </summary>
-        /// <param name="Left">Left part of Union pattern</param>
-        /// <param name="Right">Right part of Union pattern</param>
+        /// <param name="left">Left part of Union pattern</param>
+        /// <param name="right">Right part of Union pattern</param>
         /// <returns>Union graph pattern</returns>
-        public static Union Union(IWhereItem Left = null, IWhereItem Right = null)
+        public static Union Union(IWhereItem left = null, IWhereItem right = null)
         {
-            if (Left == null)
-                Left = new Group();
+            if (left == null)
+                left = new Group();
             
-            if (Right == null)
-                Right = new Group();
+            if (right == null)
+                right = new Group();
             
-            return Union(Items: new IWhereItem[] { Left, Right });
+            return Union(items: new IWhereItem[] { left, right });
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="Items"></param>
+        /// <param name="items"></param>
         /// <returns></returns>
-        public static Union Union(params IWhereItem[] Items)
+        public static Union Union(params IWhereItem[] items)
         {
-            if (Items == null)
+            if (items == null)
                 return null;
 
-            IWhereItem left = Items.Length > 0 ? Items[0] : new Group();
-            IWhereItem right = Items.Length > 1 ? Items[1] : new Group();
+            IWhereItem left = items.Length > 0 ? items[0] : new Group();
+            IWhereItem right = items.Length > 1 ? items[1] : new Group();
 
             if (left as Group == null)
                 left = new Group(left);
@@ -120,12 +120,12 @@ namespace DynamicSPARQLSpace
         /// <summary>
         /// Makes prefix
         /// </summary>
-        /// <param name="Prefix">prefix</param>
-        /// <param name="IRI">IRI</param>
+        /// <param name="prefix">prefix</param>
+        /// <param name="iri">IRI</param>
         /// <returns>Prefix</returns>
-        public static Prefix Prefix(string Prefix, string IRI)
+        public static Prefix Prefix(string prefix, string iri)
         {
-            return new Prefix { PREFIX = Prefix, IRI = IRI };
+            return new Prefix { PREFIX = prefix, IRI = iri };
         }
         /// <summary>
         /// Makes filter graph pattern
@@ -148,14 +148,14 @@ namespace DynamicSPARQLSpace
         /// <summary>
         /// Makes a "MINUS" filter expression
         /// </summary>
-        /// <param name="S">Subject of first triple</param>
-        /// <param name="P">Predicate of first triple</param>
-        /// <param name="O">Object of first triple</param>
+        /// <param name="s">Subject of first triple</param>
+        /// <param name="p">Predicate of first triple</param>
+        /// <param name="o">Object of first triple</param>
         /// <returns>"MINUS" filter expression</returns>
-        public static Minus Minus(string S = null, string P = null, string O = null)
+        public static Minus Minus(string s = null, string p = null, string o = null)
         {
             var minus = new Minus();
-            minus.Items = new[] { new Triple { Subject = S, Property = P, Object = O } };
+            minus.Items = new[] { new Triple { Subject = s, Property = p, Object = o } };
             return minus;
         }
         /// <summary>
@@ -169,29 +169,29 @@ namespace DynamicSPARQLSpace
             if (list.Count != 3)
                 throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
 
-            return Minus(S: list[0], P: list[1], O: list[2]);
+            return Minus(s: list[0], p: list[1], o: list[2]);
         }
         /// <summary>
         /// Makes a "MINUS" filter expression
         /// </summary>
-        /// <param name="Items">items</param>
+        /// <param name="items">items</param>
         /// <returns>"MINUS" filter expression</returns>
-        public static Minus Minus(params IWhereItem[] Items)
+        public static Minus Minus(params IWhereItem[] items)
         {
-            return new Minus { Items = Items };
+            return new Minus { Items = items };
         }
 
         /// <summary>
         /// Makes a "EXISTS" filter expression
         /// </summary>
-        /// <param name="S">Subject of first triple</param>
-        /// <param name="P">Predicate of first triple</param>
-        /// <param name="O">Object of first triple</param>
+        /// <param name="s">Subject of first triple</param>
+        /// <param name="p">Predicate of first triple</param>
+        /// <param name="o">Object of first triple</param>
         /// <returns>"EXISTS" filter expression</returns>
-        public static Exists Exists(string S = null, string P = null, string O = null)
+        public static Exists Exists(string s = null, string p = null, string o = null)
         {
             var exists = new Exists();
-            exists.Items = new[] { new Triple { Subject = S, Property = P, Object = O } };
+            exists.Items = new[] { new Triple { Subject = s, Property = p, Object = o } };
             return exists;
         }
         /// <summary>
@@ -205,28 +205,28 @@ namespace DynamicSPARQLSpace
             if (list.Count != 3)
                 throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
 
-            return Exists(S: list[0], P: list[1], O: list[2]);
+            return Exists(s: list[0], p: list[1], o: list[2]);
         }
         /// <summary>
         /// Makes a "EXISTS" filter expression
         /// </summary>
-        /// <param name="Items">items</param>
+        /// <param name="items">items</param>
         /// <returns>"EXISTS" filter expression</returns>
-        public static Exists Exists(params IWhereItem[] Items)
+        public static Exists Exists(params IWhereItem[] items)
         {
-            return new Exists { Items = Items };
+            return new Exists { Items = items };
         }
         /// <summary>
         /// Makes a "NOT EXISTS" filter expression
         /// </summary>
-        /// <param name="S">Subject of first triple</param>
-        /// <param name="P">Predicate of first triple</param>
-        /// <param name="O">Object of first triple</param>
+        /// <param name="s">Subject of first triple</param>
+        /// <param name="p">Predicate of first triple</param>
+        /// <param name="o">Object of first triple</param>
         /// <returns>"NOT EXISTS" filter expression</returns>
-        public static NotExists NotExists(string S = null, string P = null, string O = null)
+        public static NotExists NotExists(string s = null, string p = null, string o = null)
         {
             var notExists = new NotExists();
-            notExists.Items = new[] { new Triple { Subject = S, Property = P, Object = O } };
+            notExists.Items = new[] { new Triple { Subject = s, Property = p, Object = o } };
             return notExists;
         }
         /// <summary>
@@ -240,16 +240,16 @@ namespace DynamicSPARQLSpace
             if (list.Count != 3)
                 throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
 
-            return NotExists(S: list[0], P: list[1], O: list[2]);
+            return NotExists(s: list[0], p: list[1], o: list[2]);
         }
         /// <summary>
         /// Makes a "NOT EXISTS" filter expression
         /// </summary>
-        /// <param name="Items">items</param>
+        /// <param name="items">items</param>
         /// <returns>"NOT EXISTS" filter expression</returns>
-        public static NotExists NotExists(params IWhereItem[] Items)
+        public static NotExists NotExists(params IWhereItem[] items)
         {
-            return new NotExists { Items = Items };
+            return new NotExists { Items = items };
         }
 
 

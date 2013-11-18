@@ -29,10 +29,10 @@ namespace DynamicSPARQLSpace.Tests
             dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, autoquotation: true);
 
             dyno.Prefixes = new[]{
-                        SPARQL.Prefix(Prefix:"rdf:", IRI: "http://www.w3.org/1999/02/22-rdf-syntax-ns#" ),
-                        SPARQL.Prefix(Prefix:"rdf:", IRI: "http://www.w3.org/1999/02/22-rdf-syntax-ns#" ),
-                        SPARQL.Prefix(Prefix:"cat:", IRI: "http://my.web/catalogues#" ),
-                        SPARQL.Prefix(Prefix:"cp:", IRI: "http://my.web/catalogues/predicates/" )
+                        SPARQL.Prefix(prefix:"rdf:", iri: "http://www.w3.org/1999/02/22-rdf-syntax-ns#" ),
+                        SPARQL.Prefix(prefix:"rdf:", iri: "http://www.w3.org/1999/02/22-rdf-syntax-ns#" ),
+                        SPARQL.Prefix(prefix:"cat:", iri: "http://my.web/catalogues#" ),
+                        SPARQL.Prefix(prefix:"cp:", iri: "http://my.web/catalogues/predicates/" )
                         };
         }
 
@@ -42,7 +42,7 @@ namespace DynamicSPARQLSpace.Tests
             IEnumerable<dynamic> list = dyno.Select(
                     projection: "?s ?p ?o",
                     where: SPARQL.Group(
-                        SPARQL.Tripple(S: "?s", P: "cp:integer", O: "?o"))
+                        SPARQL.Tripple(s: "?s", p: "cp:integer", o: "?o"))
             );
 
             dynamic x = list.First();
@@ -54,7 +54,7 @@ namespace DynamicSPARQLSpace.Tests
             list = dyno.Select(
                     projection: "?s ?o",
                     where: SPARQL.Group(
-                        SPARQL.Tripple(S: "?s", P: "cp:int", O: "?o"))
+                        SPARQL.Tripple(s: "?s", p: "cp:int", o: "?o"))
             );
 
             x = list.First();
@@ -66,7 +66,7 @@ namespace DynamicSPARQLSpace.Tests
             list = dyno.Select(
                     projection: "?s ?o",
                     where: SPARQL.Group(
-                        SPARQL.Tripple(S: "?s", P: "cp:nonPositiveInteger", O: "?o"))
+                        SPARQL.Tripple(s: "?s", p: "cp:nonPositiveInteger", o: "?o"))
             );
 
             x = list.First();
@@ -78,7 +78,7 @@ namespace DynamicSPARQLSpace.Tests
             list = dyno.Select(
                     projection: "?s ?o",
                     where: SPARQL.Group(
-                        SPARQL.Tripple(S: "?s", P: "cp:negativeInteger", O: "?o"))
+                        SPARQL.Tripple(s: "?s", p: "cp:negativeInteger", o: "?o"))
             );
 
             x = list.First();
@@ -94,7 +94,7 @@ namespace DynamicSPARQLSpace.Tests
             IEnumerable<dynamic> list = dyno.Select(
                    projection: "?s ?p ?o",
                    where: SPARQL.Group(
-                       SPARQL.Tripple(S: "?s", P: "cp:datetime", O: "?o")));
+                       SPARQL.Tripple(s: "?s", p: "cp:datetime", o: "?o")));
 
             dynamic x = list.First();
 
@@ -104,7 +104,7 @@ namespace DynamicSPARQLSpace.Tests
             list = dyno.Select(
                projection: "?s ?o",
                where: SPARQL.Group(
-                   SPARQL.Tripple(S: "?s", P: "cp:date", O: "?o")));
+                   SPARQL.Tripple(s: "?s", p: "cp:date", o: "?o")));
 
             x = list.First();
 
@@ -119,7 +119,7 @@ namespace DynamicSPARQLSpace.Tests
             IEnumerable<dynamic> list = dyno.Select(
                    projection: "?s ?o",
                    where: SPARQL.Group(
-                       SPARQL.Tripple(S: "?s", P: "cp:boolean", O: "?o")));
+                       SPARQL.Tripple(s: "?s", p: "cp:boolean", o: "?o")));
 
             dynamic x = list.First();
 
@@ -134,7 +134,7 @@ namespace DynamicSPARQLSpace.Tests
             IEnumerable<dynamic> list = dyno.Select(
                     projection: "?s ?o",
                     where: SPARQL.Group(
-                        SPARQL.Tripple(S: "?s", P: "cp:long", O: "?o"))
+                        SPARQL.Tripple(s: "?s", p: "cp:long", o: "?o"))
             );
 
             dynamic x = list.First();
@@ -146,7 +146,7 @@ namespace DynamicSPARQLSpace.Tests
             list = dyno.Select(
                     projection: "?s ?o",
                     where: SPARQL.Group(
-                        SPARQL.Tripple(S: "?s", P: "cp:unsignedLong", O: "?o"))
+                        SPARQL.Tripple(s: "?s", p: "cp:unsignedLong", o: "?o"))
             );
 
             x = list.First();

@@ -47,7 +47,7 @@ namespace DynamicSPARQLSpace.Tests
                 },
                 projection: "?title",
                 where: SPARQL.Group(
-                    SPARQL.Union(Left: SPARQL.Tripple("?book dc10:title  ?title"), Right: SPARQL.Tripple("?book dc11:title  ?title"))
+                    SPARQL.Union(left: SPARQL.Tripple("?book dc10:title  ?title"), right: SPARQL.Tripple("?book dc11:title  ?title"))
                 )
             );
 
@@ -66,7 +66,7 @@ namespace DynamicSPARQLSpace.Tests
                             },
                 projection: "?x ?y",
                 where: SPARQL.Group(
-                    SPARQL.Union(Left: SPARQL.Tripple("?book dc10:title ?x"), Right: SPARQL.Tripple("?book dc11:title  ?y"))
+                    SPARQL.Union(left: SPARQL.Tripple("?book dc10:title ?x"), right: SPARQL.Tripple("?book dc11:title  ?y"))
                 )
             );
 
@@ -85,8 +85,8 @@ namespace DynamicSPARQLSpace.Tests
                 projection: "?title ?author",
                 where: SPARQL.Group(
                     SPARQL.Union(
-                        Left: SPARQL.Group(SPARQL.Tripple("?book dc10:title ?title"), SPARQL.Tripple("?book dc10:creator ?author")),
-                        Right: SPARQL.Group(SPARQL.Tripple("?book dc11:title ?title"), SPARQL.Tripple("?book dc11:creator ?author"))
+                        left: SPARQL.Group(SPARQL.Tripple("?book dc10:title ?title"), SPARQL.Tripple("?book dc10:creator ?author")),
+                        right: SPARQL.Group(SPARQL.Tripple("?book dc11:title ?title"), SPARQL.Tripple("?book dc11:creator ?author"))
                     )
                 )
             );
