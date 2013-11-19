@@ -100,10 +100,10 @@ namespace DynamicSPARQLSpace
             Delegate xprop;
             if (!TryGetSetPropertyDelegate(prop, out xprop))
             {
-                AddSetPropertyDelegate(prop, xprop = ConstructSetDelegate(prop, value).Compile());
+                AddSetPropertyDelegate(prop, xprop = ConstructSetDelegate(prop).Compile());
             }
-
-            xprop.DynamicInvoke(this.Obj, value);
+            
+            xprop.DynamicInvoke(this.Obj, Convert.ChangeType(value,xprop.Method.ReturnType));
 
             return true;
         }
@@ -130,12 +130,11 @@ namespace DynamicSPARQLSpace
             return Expression.Lambda(property, param1);
         }
 
-        private static LambdaExpression ConstructSetDelegate(string propertyName, object value)
+        private static LambdaExpression ConstructSetDelegate(string propertyName)
         {
             ParameterExpression param1 = Expression.Parameter(typeof(T), "TObj1");
             MemberExpression property = Expression.Property(param1, propertyName);
             ParameterExpression param2 = Expression.Parameter(property.Type, "TSetValue1");
-
 
             BinaryExpression ass = Expression.Assign(property, param2);
             return Expression.Lambda(ass, param1, param2);
@@ -148,7 +147,7 @@ namespace DynamicSPARQLSpace
             {
                 if (prop.CanWrite && prop.CanRead)
                 {
-                    AddSetPropertyDelegate(prop.Name, ConstructSetDelegate(prop.Name, GetDefaultValue(prop.PropertyType)).Compile());
+                    AddSetPropertyDelegate(prop.Name, ConstructSetDelegate(prop.Name).Compile());
                     AddGetPropertyDelegate(prop.Name, ConstructGetDelegate(prop.Name).Compile());
                 }
 

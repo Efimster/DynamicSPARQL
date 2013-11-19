@@ -13,17 +13,6 @@ namespace DynamicSPARQLSpace.Tests
     public class OrderByFixture
     {
 
-        private static dynamic GetDyno(string data, bool autoquotation = true)
-        {
-            var graph = new Graph();
-            graph.LoadFromString(data);
-
-            Func<string, SparqlResultSet> sendSPARQLQuery = xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
-            dynamic dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, autoquotation);
-
-            return dyno;
-        }
-
         [Theory(DisplayName = "Order by "),
             InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
                 @prefix :     <http://example.org/book/> .
@@ -35,7 +24,7 @@ namespace DynamicSPARQLSpace.Tests
                 :book2  ns:price  23 .")]
         public void TestOrderBy1(string data)
         {
-            var dyno = GetDyno(data);
+            var dyno = TestDataProvider.GetDyno(data);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { 

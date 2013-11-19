@@ -29,7 +29,7 @@ namespace DynamicSPARQLSpace.Tests
             _:a  foaf:surname  ""Doe"" .")]
         public void TestBind1(string data)
         {
-            var dyno = GetDyno(data);
+            var dyno = TestDataProvider.GetDyno(data);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { 

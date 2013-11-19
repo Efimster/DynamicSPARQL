@@ -12,17 +12,6 @@ namespace DynamicSPARQLSpace.Tests
 {
     public class NegationFixture
     {
-        private static dynamic GetDyno(string data, bool autoquotation = true, bool treatUri = false)
-        {
-            var graph = new Graph();
-            graph.LoadFromString(data);
-
-            Func<string, SparqlResultSet> sendSPARQLQuery = xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
-            dynamic dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, autoquotation, treatUri: treatUri);
-
-            return dyno;
-        }
-
 
         [Theory(DisplayName = "Removing Possible Solutions(MINUS)"),
         InlineData(@"@prefix :       <http://example/> .
@@ -38,7 +27,7 @@ namespace DynamicSPARQLSpace.Tests
                         foaf:familyName ""Smith"" .")]
         public void TestMinus1(string data)
         {
-            var dyno = GetDyno(data, treatUri:true);
+            var dyno = TestDataProvider.GetDyno(data, treatUri: true);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { SPARQL.Prefix("foaf:", "http://xmlns.com/foaf/0.1/") },
@@ -68,7 +57,7 @@ namespace DynamicSPARQLSpace.Tests
                 :bob    rdf:type   foaf:Person . ")]
         public void TestExists(string data)
         {
-            var dyno = GetDyno(data, treatUri: true);
+            var dyno = TestDataProvider.GetDyno(data, treatUri: true);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { 
@@ -98,7 +87,7 @@ namespace DynamicSPARQLSpace.Tests
                 :bob    rdf:type   foaf:Person . ")]
         public void TestNotExists(string data)
         {
-            var dyno = GetDyno(data, treatUri: true);
+            var dyno = TestDataProvider.GetDyno(data, treatUri: true);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { 

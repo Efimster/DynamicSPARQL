@@ -16,17 +16,6 @@ namespace DynamicSPARQLSpace.Tests
    public class OptionalFixture
    {
 
-        private static dynamic GetDyno(string data, bool autoquotation = true)
-        {
-            var graph = new Graph();
-            graph.LoadFromString(data);
-
-            Func<string, SparqlResultSet> sendSPARQLQuery = xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
-            dynamic dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, autoquotation);
-
-            return dyno;
-        }
-
 
         [Theory(DisplayName = "Optional Pattern Matching"),
         InlineData(@"@prefix foaf:       <http://xmlns.com/foaf/0.1/> .
@@ -41,7 +30,7 @@ namespace DynamicSPARQLSpace.Tests
                     _:b  foaf:name       ""Bob"" .")]
         public void TestOptional1(string data)
         {
-            var dyno = GetDyno(data);
+            var dyno = TestDataProvider.GetDyno(data);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { SPARQL.Prefix("foaf:", "http://xmlns.com/foaf/0.1/") },
@@ -73,7 +62,7 @@ namespace DynamicSPARQLSpace.Tests
             :book2  ns:price  23 .")]
         public void TestOptional2(string data)
         {
-            var dyno = GetDyno(data);
+            var dyno = TestDataProvider.GetDyno(data);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { 
@@ -107,7 +96,7 @@ namespace DynamicSPARQLSpace.Tests
             _:b  foaf:mbox       <mailto:bob@work.example> .")]
         public void TestOptional3(string data)
         {
-            var dyno = GetDyno(data);
+            var dyno = TestDataProvider.GetDyno(data);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { 

@@ -12,17 +12,6 @@ namespace DynamicSPARQLSpace.Tests
 {
     public class FilterFixture
     {
-        private static dynamic GetDyno(string data, bool autoquotation = true)
-        {
-            var graph = new Graph();
-            graph.LoadFromString(data);
-
-            Func<string, SparqlResultSet> sendSPARQLQuery = xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
-            dynamic dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, autoquotation);
-
-            return dyno;
-        }
-
         [Theory(DisplayName = "Filtering(Restricting the Value of Strings) "),
             InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
                 @prefix :     <http://example.org/book/> .
@@ -34,7 +23,7 @@ namespace DynamicSPARQLSpace.Tests
                 :book2  ns:price  23 .")]
         public void TestFilter1(string data)
         {
-            var dyno = GetDyno(data, autoquotation:false);
+            var dyno = TestDataProvider.GetDyno(data, autoquotation: false);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { 
@@ -51,7 +40,7 @@ namespace DynamicSPARQLSpace.Tests
             list.Count.Should().Equal(1);
             list.Any(x => x.title == "SPARQL Tutorial").Should().Be.True();
 
-            dyno = GetDyno(data, autoquotation: true);
+            dyno = TestDataProvider.GetDyno(data, autoquotation: true);
             
             res = dyno.Select(
                 prefixes: new[] { 
@@ -81,7 +70,7 @@ namespace DynamicSPARQLSpace.Tests
                 :book2  ns:price  23 .")]
         public void TestFilter2(string data)
         {
-            var dyno = GetDyno(data);
+            var dyno = TestDataProvider.GetDyno(data);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { 

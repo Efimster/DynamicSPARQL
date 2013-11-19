@@ -12,17 +12,6 @@ namespace DynamicSPARQLSpace.Tests
 {
     public class GroupByFixture
     {
-        private static dynamic GetDyno(string data, bool autoquotation = true)
-        {
-            var graph = new Graph();
-            graph.LoadFromString(data);
-
-            Func<string, SparqlResultSet> sendSPARQLQuery = xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
-            dynamic dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, autoquotation);
-
-            return dyno;
-        }
-
 
         [Theory(DisplayName = "Group By & Having"),
         InlineData(@"@prefix : <http://books.example/> .
@@ -37,7 +26,7 @@ namespace DynamicSPARQLSpace.Tests
             :book4 :price 7 .")]
         public void TestGroupBy1(string data)
         {
-            var dyno = GetDyno(data);
+            var dyno = TestDataProvider.GetDyno(data);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] {

@@ -19,6 +19,9 @@ namespace DynamicSPARQLSpace
         /// true: result uri will be treated (fragment or last segment)
         /// </summary>
         public bool TreatUri { get; private set; }
+        /// <summary>
+        /// Quering function
+        /// </summary>
         public Func<string, SparqlResultSet> QueringFunc { get; private set; }
         /// <summary>
         /// Predefined prefixes
@@ -28,7 +31,7 @@ namespace DynamicSPARQLSpace
         /// <summary>
         /// Creates dynamic object for SPARQL querying
         /// </summary>
-        /// <param name="queringFunc">Function for source SPARQL querying</param>
+        /// <param name="queringFunc">Function for SPARQL querying of RDF source </param>
         /// <param name="autoquotation">true: automatically adds missed quotes</param>
         /// <param name="treatUri">true: result uri will be treated (fragment or last segment)</param>
         /// <param name="prefixes">Predefined prefixes</param>

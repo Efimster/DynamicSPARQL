@@ -12,17 +12,6 @@ namespace DynamicSPARQLSpace.Tests
 {
     public class UnionFixture
     {
-        private static dynamic GetDyno(string data, bool autoquotation = true)
-        {
-            var graph = new Graph();
-            graph.LoadFromString(data);
-
-            Func<string, SparqlResultSet> sendSPARQLQuery = xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
-            dynamic dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, autoquotation);
-
-            return dyno;
-        }
-
 
         [Theory(DisplayName = "Alternative Matching"),
         InlineData(@"@prefix dc10:  <http://purl.org/dc/elements/1.0/> .
@@ -38,7 +27,7 @@ namespace DynamicSPARQLSpace.Tests
             _:c  dc11:title     ""SPARQL (updated)"" .")]
         public void TestUnion1(string data)
         {
-            var dyno = GetDyno(data);
+            var dyno = TestDataProvider.GetDyno(data);
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] {

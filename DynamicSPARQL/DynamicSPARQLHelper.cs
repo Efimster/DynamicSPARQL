@@ -97,10 +97,10 @@ namespace DynamicSPARQLSpace
             return Union(items: new IWhereItem[] { left, right });
         }
         /// <summary>
-        /// 
+        /// Makes Union graph pattern
         /// </summary>
-        /// <param name="items"></param>
-        /// <returns></returns>
+        /// <param name="items">left and right items</param>
+        /// <returns>Union graph pattern</returns>
         public static Union Union(params IWhereItem[] items)
         {
             if (items == null)
