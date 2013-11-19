@@ -104,7 +104,12 @@ namespace DynamicSPARQLSpace
                         projection = args[i].ToString();
                         break;
                     case "where":
-                        where = (Group)args[i];
+                        if (args[i] as Group != null)
+                            where = (Group)args[i];
+                        else if (args[i] as IWhereItem != null)
+                            where = new Group((IWhereItem)args[i]);
+                        else if (args[i] as IWhereItem[] != null)
+                            where = new Group((IWhereItem[])args[i]);
                         break;
                     case "limit":
                         limit = args[i].ToString();
