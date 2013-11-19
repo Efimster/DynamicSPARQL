@@ -88,9 +88,6 @@ namespace DynamicSPARQLSpace
             string offset = string.Empty;
             string groupBy = string.Empty;
             string having = string.Empty;
-            //string minus = string.Empty;
-            //string exists = string.Empty;
-            //string notExists = string.Empty;
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -121,16 +118,6 @@ namespace DynamicSPARQLSpace
                     case "having":
                         having = args[i].ToString();
                         break;
-                    //case "minus":
-                    //    minus = args[i].ToString();
-                    //    break;
-                    //case "exists":
-                    //    exists = args[i].ToString();
-                    //    break;
-                    //case "notexists":
-                    //    notExists = args[i].ToString();
-                    //    break;
-
                 }
             }
 

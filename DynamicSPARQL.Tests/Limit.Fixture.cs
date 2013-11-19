@@ -12,7 +12,7 @@ namespace DynamicSPARQLSpace.Tests
 {
     public class LimitFixture
     {
-              private static dynamic GetDyno(string data, bool autoquotation = true)
+        private static dynamic GetDyno(string data, bool autoquotation = true)
         {
             var graph = new Graph();
             graph.LoadFromString(data);
