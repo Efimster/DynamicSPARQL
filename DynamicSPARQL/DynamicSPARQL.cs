@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
+using HelperExtensionsLibrary.ReflectionExtentions;
 using HelperExtensionsLibrary.Strings;
 using VDS.RDF;
 using VDS.RDF.Query;

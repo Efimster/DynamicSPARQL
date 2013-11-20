@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Efimster")]
 [assembly: AssemblyProduct("DynamicSPARQL")]
-[assembly: AssemblyCopyright("Efimster@gmail.com")]
-[assembly: AssemblyTrademark("Copyright 2013 (c) Efimster")]
+[assembly: AssemblyCopyright("Copyright 2013 (c) Efimster https://github.com/Efimster")]
+[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

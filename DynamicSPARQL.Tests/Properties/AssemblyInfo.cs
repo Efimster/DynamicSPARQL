@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DynamicSPARQL.Tests")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Helps making SPARQ queries to RDF sources")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("SITRONICS TS")]
+[assembly: AssemblyCompany("Efimster")]
 [assembly: AssemblyProduct("DynamicSPARQL.Tests")]
-[assembly: AssemblyCopyright("Copyright © SITRONICS TS 2013")]
+[assembly: AssemblyCopyright("Copyright 2013 (c) Efimster https://github.com/Efimster")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
