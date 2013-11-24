@@ -9,13 +9,16 @@ namespace DynamicSPARQLSpace
     public class Group : IWhereItem, IEnumerable<IWhereItem>, IList<IWhereItem>, ICollection<IWhereItem>
     {
         public IList<IWhereItem> Items { get; set; }
+        public bool NoBrackets { get; set; }
 
-        public Group()
+        public Group(bool noBrackets = false)
         {
+            NoBrackets = noBrackets;
         }
 
         public Group(params IWhereItem[] items)
         {
+            NoBrackets = false;
             Items = new List<IWhereItem>(items);
         }
 
@@ -37,12 +40,17 @@ namespace DynamicSPARQLSpace
 
         public virtual StringBuilder AppendToString(StringBuilder sb, bool autoQuotation = false)
         {
-            sb.AppendLine("{");
+            if (!NoBrackets)
+                sb.AppendLine("{");
             foreach (IWhereItem item in Items)
             {
                 sb = item.AppendToString(sb, autoQuotation);
             }
-            return sb.AppendLine("}");
+
+            if (!NoBrackets)
+                sb.AppendLine("}");
+
+            return sb;
         }
 
         public override string ToString()

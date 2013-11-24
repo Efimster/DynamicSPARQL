@@ -126,9 +126,9 @@ namespace DynamicSPARQLSpace
         public static Prefix Prefix(string prefix, string iri)
         {
             if (prefix.IsEmpty())
-                return null;
+                prefix = ":";
 
-            if (prefix[prefix.Length - 1] != ':')
+            else if (prefix[prefix.Length - 1] != ':')
                 prefix += ':'; 
 
             return new Prefix { PREFIX = prefix, IRI = iri };
@@ -256,6 +256,35 @@ namespace DynamicSPARQLSpace
         public static NotExists NotExists(params IWhereItem[] items)
         {
             return new NotExists { Items = items };
+        }
+
+        /// <summary>
+        /// Creates triple chain. Every object used as next triple subject
+        /// </summary>
+        /// <param name="chain">Triple parts</param>
+        /// <returns>triple group. No brackets</returns>
+        public static Group TripleChain(params string[] chain)
+        {
+            if (chain.Length % 2 != 1)
+                throw new ArgumentException("wrong triple parts count", "chain");
+            
+            IList<IWhereItem> triples = new List<IWhereItem>(chain.Length/2);
+            
+            for (int i = 0; i < chain.Length-1; i+=2 )
+            {
+                triples.Add(new Triple() {Subject = chain[i+0], Property = chain[i+1], Object = chain[i+2]});
+            }
+
+            return new Group(noBrackets:true) { Items = triples };
+        }
+        /// <summary>
+        /// Creates triple chain. Every object used as next triple subject
+        /// </summary>
+        /// <param name="chain">Triple parts</param>
+        /// <returns>triple group. No brackets</returns>
+        public static Group TripleChain(string chain)
+        {
+            return TripleChain(chain.SplitExt(" ").ToArray());
         }
 
 

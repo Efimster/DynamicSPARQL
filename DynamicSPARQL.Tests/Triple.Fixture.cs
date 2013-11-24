@@ -21,7 +21,7 @@ namespace DynamicSPARQLSpace.Tests
         public TripleFixture()
         {
             var store = new TripleStore();
-            string path = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "TestTripleStores\\triple.Fixture.ttl");
+            string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName, "TestTripleStores\\triple.Fixture.ttl");
             store.LoadFromFile(path);
             var graph = store.Graphs.First();
 

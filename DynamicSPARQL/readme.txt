@@ -28,7 +28,7 @@ General usage:
 Select function parameters (ignorecase) :
 	prefixes: array of SPARQL.Prefix
 	projection:string
-	where:   SPARQL.Group with a combination of SPARQL.Triple, SPARQL.Optional, SPARQL.Group, SPARQL.Union, SPARQL.Filter, SPARQL.Exists, SPARQL.NotExists, SPARQL.Minus, SPARQL.Bind
+	where:   SPARQL.Group with a combination of SPARQL.Triple, SPARQL.Optional, SPARQL.Group, SPARQL.Union, SPARQL.Filter, SPARQL.Exists, SPARQL.NotExists, SPARQL.Minus, SPARQL.Bind, SPARQL.TripleChain
 	groupBy: string
 	having: string
 	orderBy": string
@@ -45,8 +45,8 @@ Examples:
 
         dyno.Select(
             prefixes: new[] { 
-                SPARQL.Prefix("dc:", "http://purl.org/dc/elements/1.1/"),
-                SPARQL.Prefix("ns:", "http://example.org/ns#")
+                SPARQL.Prefix("dc:", "http://purl.org/dc/elements/1.1/"),//prefix could be used with colon
+                SPARQL.Prefix("ns", "http://example.org/ns#")//or without colon
             },
             projection: "?title ?price",
             where: SPARQL.Group(
@@ -71,8 +71,8 @@ Examples:
             
 		dyno.Select(
             prefixes: new[] {
-                SPARQL.Prefix("dc10:", "http://purl.org/dc/elements/1.0/"),
-                SPARQL.Prefix("dc11:", "http://purl.org/dc/elements/1.1/")
+                SPARQL.Prefix("dc10", "http://purl.org/dc/elements/1.0/"),
+                SPARQL.Prefix("dc11", "http://purl.org/dc/elements/1.1/")
             },
             projection: "?title",
             where: SPARQL.Group(
@@ -82,8 +82,8 @@ Examples:
 
         dyno.Select(
             prefixes: new[] {
-                                        SPARQL.Prefix("dc10:", "http://purl.org/dc/elements/1.0/"),
-                                        SPARQL.Prefix("dc11:", "http://purl.org/dc/elements/1.1/")
+                                        SPARQL.Prefix("dc10", "http://purl.org/dc/elements/1.0/"),
+                                        SPARQL.Prefix("dc11", "http://purl.org/dc/elements/1.1/")
                                     },
             projection: "?title ?author",
             where: SPARQL.Group(
@@ -111,8 +111,8 @@ CreateDyno parameters:
 
 	Book book = dyno.Select<Book>(
 		prefixes: new[] { 
-			SPARQL.Prefix("dc:", "http://purl.org/dc/elements/1.1/"),
-			SPARQL.Prefix("ns:", "http://example.org/ns#"),
+			SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/"),
+			SPARQL.Prefix("ns", "http://example.org/ns#"),
 		},
 		projection: "?title ?price",
 		where: SPARQL.Group(

@@ -36,8 +36,8 @@ namespace DynamicSPARQLSpace.Tests
                 prefixes: new[] { SPARQL.Prefix("foaf:", "http://xmlns.com/foaf/0.1/") },
                 projection: "?name ?mbox",
                 where: SPARQL.Group(
-                SPARQL.Triple(s: "?x", p: "foaf:name", o: "?name"),
-                        SPARQL.Optional(s: "?x", p: "foaf:mbox", o: "?mbox")
+                    SPARQL.Triple(s: "?x", p: "foaf:name", o: "?name"),
+                    SPARQL.Optional(s: "?x", p: "foaf:mbox", o: "?mbox")
                 )
             );
 
