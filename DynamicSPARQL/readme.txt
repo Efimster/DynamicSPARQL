@@ -13,9 +13,9 @@ General usage:
         },
         projection: "(SUM(?lprice) AS ?totalPrice)",
         where: SPARQL.Group(
-            SPARQL.Tripple("?org :affiliates ?auth"),
-            SPARQL.Tripple("?auth :writesBook ?book"),
-            SPARQL.Tripple("?book :price ?lprice")
+            SPARQL.Triple("?org :affiliates ?auth"),
+            SPARQL.Triple("?auth :writesBook ?book"),
+            SPARQL.Triple("?book :price ?lprice")
         ),
         groupBy:"?org",
         having: "(SUM(?lprice) > 10)"
@@ -40,7 +40,7 @@ Examples:
     IEnumerable<dynamic> list = dyno.Select(
             projection: "?s ?o",
             where: SPARQL.Group(
-                SPARQL.Tripple(s: "?s", p: "cp:boolean", o: "?o")));
+                SPARQL.Triple(s: "?s", p: "cp:boolean", o: "?o")));
 
 
         dyno.Select(
@@ -50,9 +50,9 @@ Examples:
             },
             projection: "?title ?price",
             where: SPARQL.Group(
-                SPARQL.Tripple("?x dc:title ?title"),
+                SPARQL.Triple("?x dc:title ?title"),
                 SPARQL.Optional(
-                    SPARQL.Tripple("?x ns:price ?price"),
+                    SPARQL.Triple("?x ns:price ?price"),
                     SPARQL.Filter("?price < 30"))
             )
         );
@@ -64,7 +64,7 @@ Examples:
             },
             projection: "?person",
             where: SPARQL.Group(
-                SPARQL.Tripple("?person rdf:type  foaf:Person"),
+                SPARQL.Triple("?person rdf:type  foaf:Person"),
                 SPARQL.Exists("?person foaf:name ?name")
             )
         );
@@ -76,7 +76,7 @@ Examples:
             },
             projection: "?title",
             where: SPARQL.Group(
-                SPARQL.Union(left: SPARQL.Tripple("?book dc10:title  ?title"), right: SPARQL.Tripple("?book dc11:title  ?title"))
+                SPARQL.Union(left: SPARQL.Triple("?book dc10:title  ?title"), right: SPARQL.Triple("?book dc11:title  ?title"))
             )
         );
 
@@ -88,8 +88,8 @@ Examples:
             projection: "?title ?author",
             where: SPARQL.Group(
                 SPARQL.Union(
-                    left: SPARQL.Group(SPARQL.Tripple("?book dc10:title ?title"), SPARQL.Tripple("?book dc10:creator ?author")),
-                    right: SPARQL.Group(SPARQL.Tripple("?book dc11:title ?title"), SPARQL.Tripple("?book dc11:creator ?author"))
+                    left: SPARQL.Group(SPARQL.Triple("?book dc10:title ?title"), SPARQL.Triple("?book dc10:creator ?author")),
+                    right: SPARQL.Group(SPARQL.Triple("?book dc11:title ?title"), SPARQL.Triple("?book dc11:creator ?author"))
                 )
             )
         );
@@ -116,8 +116,8 @@ CreateDyno parameters:
 		},
 		projection: "?title ?price",
 		where: SPARQL.Group(
-			SPARQL.Tripple("?x ns:price ?price"),
-			SPARQL.Tripple("?x dc:title ?title")
+			SPARQL.Triple("?x ns:price ?price"),
+			SPARQL.Triple("?x dc:title ?title")
 		),
 		orderBy: "desc(?price)"
 	)

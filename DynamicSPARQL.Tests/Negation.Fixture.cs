@@ -33,7 +33,7 @@ namespace DynamicSPARQLSpace.Tests
                 prefixes: new[] { SPARQL.Prefix("foaf:", "http://xmlns.com/foaf/0.1/") },
                 projection: "DISTINCT ?s",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?s ?p ?o"),
+                    SPARQL.Triple("?s ?p ?o"),
                     SPARQL.Minus("?s foaf:givenName Bob")
                 )
             );
@@ -66,7 +66,7 @@ namespace DynamicSPARQLSpace.Tests
                 },
                 projection: "?person",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?person rdf:type  foaf:Person"),
+                    SPARQL.Triple("?person rdf:type  foaf:Person"),
                     SPARQL.Exists("?person foaf:name ?name")
                 )
             );
@@ -96,7 +96,7 @@ namespace DynamicSPARQLSpace.Tests
                 },
                 projection: "?person",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?person rdf:type  foaf:Person"),
+                    SPARQL.Triple("?person rdf:type  foaf:Person"),
                     SPARQL.NotExists("?person foaf:name ?name")
                 )
             );

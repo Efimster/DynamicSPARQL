@@ -37,8 +37,8 @@ namespace DynamicSPARQLSpace.Tests
                 },
                 projection: "?name",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?P foaf:givenName ?G"),
-                    SPARQL.Tripple("?P foaf:surname ?S"),
+                    SPARQL.Triple("?P foaf:givenName ?G"),
+                    SPARQL.Triple("?P foaf:surname ?S"),
                     SPARQL.Bind("CONCAT(?G, \" \", ?S) AS ?name")
                 )
             );

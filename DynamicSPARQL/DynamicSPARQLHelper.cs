@@ -19,7 +19,7 @@ namespace DynamicSPARQLSpace
         /// <param name="p">Predicate</param>
         /// <param name="o">Object</param>
         /// <returns>triple</returns>
-        public static Triple Tripple(string s = null, dynamic p = null, dynamic o = null)
+        public static Triple Triple(string s = null, dynamic p = null, dynamic o = null)
         {
             return new Triple() { Subject = s, Property = p, Object = o };
         }
@@ -28,7 +28,7 @@ namespace DynamicSPARQLSpace
         /// </summary>
         /// <param name="triple">triple string</param>
         /// <returns>triple</returns>
-        public static Triple Tripple(string triple)
+        public static Triple Triple(string triple)
         {
             IList<string> list = triple.SplitExt(" ").ToArray();
             if (list.Count != 3)
@@ -125,6 +125,12 @@ namespace DynamicSPARQLSpace
         /// <returns>Prefix</returns>
         public static Prefix Prefix(string prefix, string iri)
         {
+            if (prefix.IsEmpty())
+                return null;
+
+            if (prefix[prefix.Length - 1] != ':')
+                prefix += ':'; 
+
             return new Prefix { PREFIX = prefix, IRI = iri };
         }
         /// <summary>

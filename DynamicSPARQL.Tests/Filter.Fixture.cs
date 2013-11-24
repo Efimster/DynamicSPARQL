@@ -27,11 +27,11 @@ namespace DynamicSPARQLSpace.Tests
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { 
-                    SPARQL.Prefix("dc:", "http://purl.org/dc/elements/1.1/"),
+                    SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/"),
                 },
                 projection: "?title",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?x dc:title ?title"),
+                    SPARQL.Triple("?x dc:title ?title"),
                     SPARQL.Filter("regex(?title, \"^SPARQL\")")
                 )
             );
@@ -44,11 +44,11 @@ namespace DynamicSPARQLSpace.Tests
             
             res = dyno.Select(
                 prefixes: new[] { 
-                    SPARQL.Prefix("dc:", "http://purl.org/dc/elements/1.1/"),
+                    SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/"),
                 },
                 projection: "?title",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?x dc:title ?title"),
+                    SPARQL.Triple("?x dc:title ?title"),
                     SPARQL.Filter("regex(?title, web, i ) ")
                 )
             );
@@ -74,14 +74,14 @@ namespace DynamicSPARQLSpace.Tests
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { 
-                    SPARQL.Prefix("dc:", "http://purl.org/dc/elements/1.1/"),
-                    SPARQL.Prefix("ns:", "http://example.org/ns#"),
+                    SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/"),
+                    SPARQL.Prefix("ns", "http://example.org/ns#"),
                 },
                 projection: "?title ?price",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?x ns:price ?price"),
+                    SPARQL.Triple("?x ns:price ?price"),
                     SPARQL.Filter("?price < 30.5"),
-                    SPARQL.Tripple("?x dc:title ?title")
+                    SPARQL.Triple("?x dc:title ?title")
                 )
             );
 

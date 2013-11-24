@@ -32,8 +32,8 @@ namespace DynamicSPARQLSpace.Tests
                 },
                 projection: "?title ?price",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?x ns:price ?price"),
-                    SPARQL.Tripple("?x dc:title ?title")
+                    SPARQL.Triple("?x ns:price ?price"),
+                    SPARQL.Triple("?x dc:title ?title")
                 ),
                 orderBy: "desc(?price)",
                 limit:1,

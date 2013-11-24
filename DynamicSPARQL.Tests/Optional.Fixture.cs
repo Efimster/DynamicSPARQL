@@ -36,7 +36,7 @@ namespace DynamicSPARQLSpace.Tests
                 prefixes: new[] { SPARQL.Prefix("foaf:", "http://xmlns.com/foaf/0.1/") },
                 projection: "?name ?mbox",
                 where: SPARQL.Group(
-                SPARQL.Tripple(s: "?x", p: "foaf:name", o: "?name"),
+                SPARQL.Triple(s: "?x", p: "foaf:name", o: "?name"),
                         SPARQL.Optional(s: "?x", p: "foaf:mbox", o: "?mbox")
                 )
             );
@@ -71,9 +71,9 @@ namespace DynamicSPARQLSpace.Tests
                 },
                 projection: "?title ?price",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?x dc:title ?title"),
+                    SPARQL.Triple("?x dc:title ?title"),
                     SPARQL.Optional(
-                        SPARQL.Tripple("?x ns:price ?price"),
+                        SPARQL.Triple("?x ns:price ?price"),
                         SPARQL.Filter("?price < 30"))
                 )
             );
@@ -104,7 +104,7 @@ namespace DynamicSPARQLSpace.Tests
                 },
                 projection: "?name ?mbox ?hpage",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?x foaf:name  ?name"),
+                    SPARQL.Triple("?x foaf:name  ?name"),
                     SPARQL.Optional("?x foaf:mbox ?mbox"),
                     SPARQL.Optional("?x foaf:homepage ?hpage"))
 

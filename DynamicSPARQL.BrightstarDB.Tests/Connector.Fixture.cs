@@ -28,7 +28,7 @@ namespace DynamicSPARQLSpace.BrightstarDB.Tests
 
                 IEnumerable<dynamic> list = dyno.Select(
                         projection: "?s ?p ?o",
-                        where: SPARQL.Group(SPARQL.Tripple("?s ?p ?o"))
+                        where: SPARQL.Group(SPARQL.Triple("?s ?p ?o"))
                 );
 
                 IList<string> result = list.Select(triple => (string)triple.o).ToList();

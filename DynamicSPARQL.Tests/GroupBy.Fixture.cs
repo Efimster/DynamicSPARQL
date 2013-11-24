@@ -34,9 +34,9 @@ namespace DynamicSPARQLSpace.Tests
                 },
                 projection: "(SUM(?lprice) AS ?totalPrice)",
                 where: SPARQL.Group(
-                    SPARQL.Tripple("?org :affiliates ?auth"),
-                    SPARQL.Tripple("?auth :writesBook ?book"),
-                    SPARQL.Tripple("?book :price ?lprice")
+                    SPARQL.Triple("?org :affiliates ?auth"),
+                    SPARQL.Triple("?auth :writesBook ?book"),
+                    SPARQL.Triple("?book :price ?lprice")
                 ),
                 groupBy:"?org",
                 having: "SUM(?lprice) > 10"

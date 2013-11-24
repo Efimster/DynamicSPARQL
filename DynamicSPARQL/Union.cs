@@ -17,8 +17,8 @@ namespace DynamicSPARQLSpace
         public Group Left { get { return Items[0] as Group; } set { Items[0] = value; } }
         public Group Right { get { return Items[1] as Group; } set { Items[1] = value; } }
 
-        public Triple LeftTripple { get { return Left.Items[0] as Triple; } set { Left.Items[0] = value; } }
-        public Triple RightTripple { get { return Right.Items[0] as Triple; } set { Right.Items[0] = value; } }
+        public Triple LeftTriple { get { return Left.Items[0] as Triple; } set { Left.Items[0] = value; } }
+        public Triple RightTriple { get { return Right.Items[0] as Triple; } set { Right.Items[0] = value; } }
 
         public new WhreItemType ItemType { get { return WhreItemType.Union; } }
 
