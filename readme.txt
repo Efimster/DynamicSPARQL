@@ -1,4 +1,4 @@
-﻿DynamicSPARQL helps making SPARQ queries to RDF sources
+DynamicSPARQL helps making SPARQ queries to RDF sources
 
 General usage:
 
@@ -13,9 +13,9 @@ General usage:
         },
         projection: "(SUM(?lprice) AS ?totalPrice)",
         where: SPARQL.Group(
-            SPARQL.Tripple("?org :affiliates ?auth"),
-            SPARQL.Tripple("?auth :writesBook ?book"),
-            SPARQL.Tripple("?book :price ?lprice")
+            SPARQL.Triple("?org :affiliates ?auth"),
+            SPARQL.Triple("?auth :writesBook ?book"),
+            SPARQL.Triple("?book :price ?lprice")
         ),
         groupBy:"?org",
         having: "(SUM(?lprice) > 10)"
@@ -28,7 +28,7 @@ General usage:
 Select function parameters (ignorecase) :
 	prefixes: array of SPARQL.Prefix
 	projection:string
-	where:   SPARQL.Group with a combination of SPARQL.Triple, SPARQL.Optional, SPARQL.Group, SPARQL.Union, SPARQL.Filter, SPARQL.Exists, SPARQL.NotExists, SPARQL.Minus, SPARQL.Bind
+	where:   SPARQL.Group with a combination of SPARQL.Triple, SPARQL.Optional, SPARQL.Group, SPARQL.Union, SPARQL.Filter, SPARQL.Exists, SPARQL.NotExists, SPARQL.Minus, SPARQL.Bind, SPARQL.TripleChain
 	groupBy: string
 	having: string
 	orderBy": string
@@ -40,19 +40,19 @@ Examples:
     IEnumerable<dynamic> list = dyno.Select(
             projection: "?s ?o",
             where: SPARQL.Group(
-                SPARQL.Tripple(s: "?s", p: "cp:boolean", o: "?o")));
+                SPARQL.Triple(s: "?s", p: "cp:boolean", o: "?o")));
 
 
         dyno.Select(
             prefixes: new[] { 
-                SPARQL.Prefix("dc:", "http://purl.org/dc/elements/1.1/"),
-                SPARQL.Prefix("ns:", "http://example.org/ns#")
+                SPARQL.Prefix("dc:", "http://purl.org/dc/elements/1.1/"),//prefix could be used with colon
+                SPARQL.Prefix("ns", "http://example.org/ns#")//or without colon
             },
             projection: "?title ?price",
             where: SPARQL.Group(
-                SPARQL.Tripple("?x dc:title ?title"),
+                SPARQL.Triple("?x dc:title ?title"),
                 SPARQL.Optional(
-                    SPARQL.Tripple("?x ns:price ?price"),
+                    SPARQL.Triple("?x ns:price ?price"),
                     SPARQL.Filter("?price < 30"))
             )
         );
@@ -64,32 +64,32 @@ Examples:
             },
             projection: "?person",
             where: SPARQL.Group(
-                SPARQL.Tripple("?person rdf:type  foaf:Person"),
+                SPARQL.Triple("?person rdf:type  foaf:Person"),
                 SPARQL.Exists("?person foaf:name ?name")
             )
         );
             
 		dyno.Select(
             prefixes: new[] {
-                SPARQL.Prefix("dc10:", "http://purl.org/dc/elements/1.0/"),
-                SPARQL.Prefix("dc11:", "http://purl.org/dc/elements/1.1/")
+                SPARQL.Prefix("dc10", "http://purl.org/dc/elements/1.0/"),
+                SPARQL.Prefix("dc11", "http://purl.org/dc/elements/1.1/")
             },
             projection: "?title",
             where: SPARQL.Group(
-                SPARQL.Union(left: SPARQL.Tripple("?book dc10:title  ?title"), right: SPARQL.Tripple("?book dc11:title  ?title"))
+                SPARQL.Union(left: SPARQL.Triple("?book dc10:title  ?title"), right: SPARQL.Triple("?book dc11:title  ?title"))
             )
         );
 
         dyno.Select(
             prefixes: new[] {
-                                        SPARQL.Prefix("dc10:", "http://purl.org/dc/elements/1.0/"),
-                                        SPARQL.Prefix("dc11:", "http://purl.org/dc/elements/1.1/")
+                                        SPARQL.Prefix("dc10", "http://purl.org/dc/elements/1.0/"),
+                                        SPARQL.Prefix("dc11", "http://purl.org/dc/elements/1.1/")
                                     },
             projection: "?title ?author",
             where: SPARQL.Group(
                 SPARQL.Union(
-                    left: SPARQL.Group(SPARQL.Tripple("?book dc10:title ?title"), SPARQL.Tripple("?book dc10:creator ?author")),
-                    right: SPARQL.Group(SPARQL.Tripple("?book dc11:title ?title"), SPARQL.Tripple("?book dc11:creator ?author"))
+                    left: SPARQL.Group(SPARQL.Triple("?book dc10:title ?title"), SPARQL.Triple("?book dc10:creator ?author")),
+                    right: SPARQL.Group(SPARQL.Triple("?book dc11:title ?title"), SPARQL.Triple("?book dc11:creator ?author"))
                 )
             )
         );
@@ -111,13 +111,13 @@ CreateDyno parameters:
 
 	Book book = dyno.Select<Book>(
 		prefixes: new[] { 
-			SPARQL.Prefix("dc:", "http://purl.org/dc/elements/1.1/"),
-			SPARQL.Prefix("ns:", "http://example.org/ns#"),
+			SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/"),
+			SPARQL.Prefix("ns", "http://example.org/ns#"),
 		},
 		projection: "?title ?price",
 		where: SPARQL.Group(
-			SPARQL.Tripple("?x ns:price ?price"),
-			SPARQL.Tripple("?x dc:title ?title")
+			SPARQL.Triple("?x ns:price ?price"),
+			SPARQL.Triple("?x dc:title ?title")
 		),
 		orderBy: "desc(?price)"
 	)
