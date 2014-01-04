@@ -39,8 +39,8 @@ Examples:
 
     IEnumerable<dynamic> list = dyno.Select(
             projection: "?s ?o",
-            where: SPARQL.Group(
-                SPARQL.Triple(s: "?s", p: "cp:boolean", o: "?o")));
+            where: SPARQL.Triple(s: "?s", p: "cp:boolean", o: "?o")
+	);
 
 
         dyno.Select(

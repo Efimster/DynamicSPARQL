@@ -14,7 +14,7 @@ namespace DynamicSPARQLSpace.BrightstarDB.Tests
     {
         private IBrightstarService client;
 
-        [Fact(DisplayName = "Brightstar Connector Test")]
+        [Fact(DisplayName = "Brightstar Connector Test"),Xunit.Trait("BrightstarDB connector", "")]
         public void BrightstarConnectorTest()
         {
             string storeName = null;

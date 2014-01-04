@@ -12,7 +12,8 @@ namespace DynamicSPARQLSpace.Tests
     public class SelectFixture
     {
         [Theory(DisplayName = "Typed projection "),
-        InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
+         Xunit.Trait("SPARQL Query", ""),
+         InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
                 @prefix :     <http://example.org/book/> .
                 @prefix ns:   <http://example.org/ns#> .
 

@@ -36,13 +36,12 @@ namespace DynamicSPARQLSpace.Tests
                         };
         }
 
-        [Fact(DisplayName = "TripleWithInteger")]
+        [Fact(DisplayName = "TripleWithInteger"),Xunit.Trait("SPARQL Query", "typed")]
         public void TestTripleWithInteger()
         {
             IEnumerable<dynamic> list = dyno.Select(
                     projection: "?s ?p ?o",
-                    where: SPARQL.Group(
-                        SPARQL.Triple(s: "?s", p: "cp:integer", o: "?o"))
+                    where: SPARQL.Triple(s: "?s", p: "cp:integer", o: "?o")
             );
 
             dynamic x = list.First();
@@ -53,8 +52,7 @@ namespace DynamicSPARQLSpace.Tests
 
             list = dyno.Select(
                     projection: "?s ?o",
-                    where: SPARQL.Group(
-                        SPARQL.Triple(s: "?s", p: "cp:int", o: "?o"))
+                    where: SPARQL.Triple(s: "?s", p: "cp:int", o: "?o")
             );
 
             x = list.First();
@@ -65,8 +63,7 @@ namespace DynamicSPARQLSpace.Tests
 
             list = dyno.Select(
                     projection: "?s ?o",
-                    where: SPARQL.Group(
-                        SPARQL.Triple(s: "?s", p: "cp:nonPositiveInteger", o: "?o"))
+                    where: SPARQL.Triple(s: "?s", p: "cp:nonPositiveInteger", o: "?o")
             );
 
             x = list.First();
@@ -77,8 +74,7 @@ namespace DynamicSPARQLSpace.Tests
 
             list = dyno.Select(
                     projection: "?s ?o",
-                    where: SPARQL.Group(
-                        SPARQL.Triple(s: "?s", p: "cp:negativeInteger", o: "?o"))
+                    where: SPARQL.Triple(s: "?s", p: "cp:negativeInteger", o: "?o")
             );
 
             x = list.First();
@@ -88,13 +84,13 @@ namespace DynamicSPARQLSpace.Tests
             i.Should().Equals(-100);
         }
 
-        [Fact(DisplayName = "TripleWithDateTime")]
+        [Fact(DisplayName = "TripleWithDateTime"), Xunit.Trait("SPARQL Query", "typed"),]
         public void TestTripleWithDateTime()
         {
             IEnumerable<dynamic> list = dyno.Select(
                    projection: "?s ?p ?o",
-                   where: SPARQL.Group(
-                       SPARQL.Triple(s: "?s", p: "cp:datetime", o: "?o")));
+                   where: SPARQL.Triple(s: "?s", p: "cp:datetime", o: "?o")
+            );
 
             dynamic x = list.First();
 
@@ -113,13 +109,13 @@ namespace DynamicSPARQLSpace.Tests
 
         }
 
-        [Fact(DisplayName = "TripleWithBoolean")]
+        [Fact(DisplayName = "TripleWithBoolean"), Xunit.Trait("SPARQL Query", "typed")]
         public void TestTripleWithBoolean()
         {
             IEnumerable<dynamic> list = dyno.Select(
                    projection: "?s ?o",
-                   where: SPARQL.Group(
-                       SPARQL.Triple(s: "?s", p: "cp:boolean", o: "?o")));
+                   where: SPARQL.Triple(s: "?s", p: "cp:boolean", o: "?o")
+            );
 
             dynamic x = list.First();
 
@@ -128,13 +124,12 @@ namespace DynamicSPARQLSpace.Tests
 
 
         }
-        [Fact(DisplayName = "TripleWithLong")]
+        [Fact(DisplayName = "TripleWithLong"), Xunit.Trait("SPARQL Query", "typed"),]
         public void TestTripleWithLong()
         {
             IEnumerable<dynamic> list = dyno.Select(
                     projection: "?s ?o",
-                    where: SPARQL.Group(
-                        SPARQL.Triple(s: "?s", p: "cp:long", o: "?o"))
+                    where: SPARQL.Triple(s: "?s", p: "cp:long", o: "?o")
             );
 
             dynamic x = list.First();
@@ -145,8 +140,7 @@ namespace DynamicSPARQLSpace.Tests
 
             list = dyno.Select(
                     projection: "?s ?o",
-                    where: SPARQL.Group(
-                        SPARQL.Triple(s: "?s", p: "cp:unsignedLong", o: "?o"))
+                    where: SPARQL.Triple(s: "?s", p: "cp:unsignedLong", o: "?o")
             );
 
             x = list.First();

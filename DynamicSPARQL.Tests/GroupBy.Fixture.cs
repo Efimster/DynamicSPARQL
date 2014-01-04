@@ -14,7 +14,8 @@ namespace DynamicSPARQLSpace.Tests
     {
 
         [Theory(DisplayName = "Group By & Having"),
-        InlineData(@"@prefix : <http://books.example/> .
+         Xunit.Trait("SPARQL Query", ""),
+         InlineData(@"@prefix : <http://books.example/> .
             :org1 :affiliates :auth1, :auth2 .
             :auth1 :writesBook :book1, :book2 .
             :book1 :price 9 .

@@ -11,7 +11,8 @@ namespace DynamicSPARQLSpace.Tests
     public class Path
     {
         [Theory(DisplayName = "Property Paths and Equivalent Patterns "),
-            InlineData(@"@prefix :       <http://example/> .
+         Xunit.Trait("SPARQL Query", ""),
+         InlineData(@"@prefix :       <http://example/> .
             :order  :item :z1 .
             :order  :item :z2 .
 
@@ -29,9 +30,7 @@ namespace DynamicSPARQLSpace.Tests
                     SPARQL.Prefix("", "http://example/")
                 },
                 projection: "sum(?x) AS ?total",
-                where: SPARQL.Group(
-                    SPARQL.Triple("?s :item/:price ?x")
-                )
+                where: SPARQL.Triple("?s :item/:price ?x")
             );
 
             var list = res.ToList();
@@ -41,7 +40,8 @@ namespace DynamicSPARQLSpace.Tests
         }
 
         [Theory(DisplayName = "Property Paths with triple chain "),
-            InlineData(@"@prefix :       <http://example/> .
+         Xunit.Trait("SPARQL Query", ""),
+         InlineData(@"@prefix :       <http://example/> .
                     :order  :item :z1 .
                     :order  :item :z2 .
 
@@ -59,9 +59,7 @@ namespace DynamicSPARQLSpace.Tests
                     SPARQL.Prefix("", "http://example/")
                 },
                 projection: "*",
-                where: SPARQL.Group(
-                    SPARQL.TripleChain("?order :item  ?item :price ?price")
-                )
+                where: SPARQL.TripleChain("?order :item  ?item :price ?price")
             );
 
             var list = res.ToList();

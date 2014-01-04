@@ -88,6 +88,7 @@
     <Compile Include="Triple.Fixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Union.Fixture.cs" />
+    <Compile Include="Update.Fixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -18,7 +18,8 @@ namespace DynamicSPARQLSpace.Tests
 
 
         [Theory(DisplayName = "Optional Pattern Matching"),
-        InlineData(@"@prefix foaf:       <http://xmlns.com/foaf/0.1/> .
+         Xunit.Trait("SPARQL Query", ""),
+         InlineData(@"@prefix foaf:       <http://xmlns.com/foaf/0.1/> .
                     @prefix rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
                     _:a  rdf:type        foaf:Person .
@@ -52,7 +53,8 @@ namespace DynamicSPARQLSpace.Tests
         }
 
         [Theory(DisplayName = "Constraints in Optional Pattern Matching"),
-             InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
+         Xunit.Trait("SPARQL Query", ""),
+         InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
             @prefix :     <http://example.org/book/> .
             @prefix ns:   <http://example.org/ns#> .
 
@@ -74,7 +76,8 @@ namespace DynamicSPARQLSpace.Tests
                     SPARQL.Triple("?x dc:title ?title"),
                     SPARQL.Optional(
                         SPARQL.Triple("?x ns:price ?price"),
-                        SPARQL.Filter("?price < 30"))
+                        SPARQL.Filter("?price < 30")
+                    )
                 )
             );
 
@@ -88,7 +91,8 @@ namespace DynamicSPARQLSpace.Tests
         }
 
         [Theory(DisplayName = "Multiple Optional Graph Patterns"),
-            InlineData(@"@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+         Xunit.Trait("SPARQL Query", ""),
+         InlineData(@"@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
             _:a  foaf:name       ""Alice"" .
             _:a  foaf:homepage   ""http://work.example.org/alice/"" .
 
@@ -104,9 +108,10 @@ namespace DynamicSPARQLSpace.Tests
                 },
                 projection: "?name ?mbox ?hpage",
                 where: SPARQL.Group(
-                    SPARQL.Triple("?x foaf:name  ?name"),
-                    SPARQL.Optional("?x foaf:mbox ?mbox"),
-                    SPARQL.Optional("?x foaf:homepage ?hpage"))
+                        SPARQL.Triple("?x foaf:name  ?name"),
+                        SPARQL.Optional("?x foaf:mbox ?mbox"),
+                        SPARQL.Optional("?x foaf:homepage ?hpage")
+                    )
 
             );
 

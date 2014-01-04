@@ -14,7 +14,8 @@ namespace DynamicSPARQLSpace.Tests
     {
 
         [Theory(DisplayName = "Order by "),
-            InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
+         Xunit.Trait("SPARQL Query", ""),
+         InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
                 @prefix :     <http://example.org/book/> .
                 @prefix ns:   <http://example.org/ns#> .
 
@@ -32,10 +33,7 @@ namespace DynamicSPARQLSpace.Tests
                     SPARQL.Prefix("ns:", "http://example.org/ns#"),
                 },
                 projection: "?title ?price",
-                where: SPARQL.Group(
-                    SPARQL.Triple("?x ns:price ?price"),
-                    SPARQL.Triple("?x dc:title ?title")
-                ),
+                where: SPARQL.Triple(s: "?x", p: new[] { "ns:price ?price", "dc:title ?title" }),
                 orderBy: "desc(?price)"
             );
 

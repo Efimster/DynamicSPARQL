@@ -14,7 +14,8 @@ namespace DynamicSPARQLSpace.Tests
     {
 
         [Theory(DisplayName = "Alternative Matching"),
-        InlineData(@"@prefix dc10:  <http://purl.org/dc/elements/1.0/> .
+         Xunit.Trait("SPARQL Query", ""),
+         InlineData(@"@prefix dc10:  <http://purl.org/dc/elements/1.0/> .
             @prefix dc11:  <http://purl.org/dc/elements/1.1/> .
 
             _:a  dc10:title     ""SPARQL Query Language Tutorial"" .

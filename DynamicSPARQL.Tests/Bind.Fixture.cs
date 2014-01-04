@@ -12,18 +12,8 @@ namespace DynamicSPARQLSpace.Tests
 {
     public class BindFixture
     {
-        private static dynamic GetDyno(string data, bool autoquotation = true)
-        {
-            var graph = new Graph();
-            graph.LoadFromString(data);
 
-            Func<string, SparqlResultSet> sendSPARQLQuery = xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
-            dynamic dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, autoquotation);
-
-            return dyno;
-        }
-
-        [Theory(DisplayName = "Binding"),
+        [Theory(DisplayName = "Binding"), Xunit.Trait("SPARQL Query", ""),
             InlineData(@"@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
             _:a  foaf:givenName   ""John"" .
             _:a  foaf:surname  ""Doe"" .")]
