@@ -28,7 +28,7 @@ namespace DynamicSPARQLSpace.Tests
             };
 
             dynamic dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, 
-                updateQueringFunc: updateSPARQL,
+                updateFunc: updateSPARQL,
                 autoquotation: autoquotation, 
                 treatUri: treatUri);
 

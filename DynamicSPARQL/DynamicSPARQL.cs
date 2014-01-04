@@ -12,6 +12,8 @@ namespace DynamicSPARQLSpace
 {
     public class DynamicSPARQL : DynamicObject
     {
+        public  static readonly string[] OPERATIONS = {"select","update","delete","insert"};
+        
         /// <summary>
         /// true: automatically adds missed quotes
         /// </summary>
@@ -31,25 +33,29 @@ namespace DynamicSPARQLSpace
         /// <summary>
         /// Update query function
         /// </summary>
-        public Action<string> UpdateQueryingFunc { get; private set; }
+        public Action<string> UpdateFunc { get; private set; }
+        /// <summary>
+        /// Print of last query
+        /// </summary>
+        public string LastQueryPrint { get; private set; }
 
         /// <summary>
         /// Creates dynamic object for SPARQL querying
         /// </summary>
         /// <param name="queryingFunc">Function for SPARQL querying to RDF source </param>
-        /// <param name="updateQueringFunc">Function for SPARQL UPDATE querying to RDF source. </param>
+        /// <param name="updateFunc">Function for SPARQL UPDATE querying to RDF source. </param>
         /// <param name="autoquotation">true: automatically adds missed quotes</param>
         /// <param name="treatUri">true: result uri will be treated (fragment or last segment)</param>
         /// <param name="prefixes">Predefined prefixes</param>
         /// <returns></returns>
         public static dynamic CreateDyno(
             Func<string, SparqlResultSet> queryingFunc, 
-            Action<string> updateQueringFunc = null,
+            Action<string> updateFunc = null,
             bool autoquotation = false, 
             bool treatUri = true, 
             IEnumerable<Prefix> prefixes = null)
         {
-            return (dynamic)(new DynamicSPARQL(queryingFunc, updateQueringFunc,autoquotation, treatUri, prefixes));
+            return (dynamic)(new DynamicSPARQL(queryingFunc, updateFunc,autoquotation, treatUri, prefixes));
         }
 
         private DynamicSPARQL(
@@ -60,7 +66,7 @@ namespace DynamicSPARQLSpace
             IEnumerable<Prefix> prefixes = null)
         {
             QueryingFunc = queringFunc;
-            UpdateQueryingFunc = updateQueringFunc;
+            UpdateFunc = updateQueringFunc;
             AutoQuotation = autoquotation;
             TreatUri = treatUri;
             Prefixes = prefixes == null ? new List<Prefix>(5) : new List<Prefix>(prefixes);
@@ -86,11 +92,11 @@ namespace DynamicSPARQLSpace
             //first should be "Select, Construct, ASK, Describe"
             var op = binder.Name.ToLower();
 
-            //the "select" and "update" methods are supported only
-            if (op != "select" && op!="update")
+            //supported methods 
+            if (!OPERATIONS.Contains(op))
                 return false;
 
-            if (op == "update" && UpdateQueryingFunc == null)
+            if (op != "select" && UpdateFunc == null)
                 throw new ArgumentNullException("updateQueryingFunc", "Please define function for SPARQL Update while DynamicSPARQL.CreateDyno(...) call");
                         
 
@@ -145,16 +151,27 @@ namespace DynamicSPARQLSpace
 
             
             if (op=="select")
-                result = Select<dynamic>(prefixes, projection, where, orderBy, groupBy, having, limit, offset);
-            if (op == "update")
             {
-                Update(prefixes, where, delete, insert);
-                result = 0;
+                result = Select<dynamic>(prefixes, projection, where, orderBy, groupBy, having, limit, offset);
+                return true;
             }
 
+
+            if (op == "update")
+                Update(prefixes, where, delete, insert);
+            else if (op == "delete")
+                Delete(prefixes, where, delete);
+            else if (op == "insert")
+                Insert(prefixes, where, insert);
+            
+            result = 0;
             return true;
         }
-
+        /// <summary>
+        /// Parse group pattern
+        /// </summary>
+        /// <param name="arg">Named parameter value</param>
+        /// <returns>Group pattern</returns>
         private Group ParseGroup(object arg)
         {
             return (arg as Group != null) ? (Group)arg :
@@ -201,6 +218,7 @@ namespace DynamicSPARQLSpace
 
             string query = new[] { prefixesStr, projection, wherestr, groupBy, having, orderBy, limit, offset }.Join2String(Environment.NewLine);
 
+
             if (typeof(T).FullName == "System.Object")
             {
                 foreach (var res in Query(query))
@@ -223,6 +241,7 @@ namespace DynamicSPARQLSpace
         private IEnumerable<dynamic> Query(string SPARQLQuery)
         {
             var resultSet = QueryingFunc(SPARQLQuery);
+            LastQueryPrint = SPARQLQuery;
 
             foreach (var result in resultSet)
             {
@@ -240,9 +259,6 @@ namespace DynamicSPARQLSpace
                 
                 yield return item;
             }
-
-
-
         }
 
         /// <summary>
@@ -274,7 +290,7 @@ namespace DynamicSPARQLSpace
         /// <summary>
         /// Resolves result node value
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="node">Node</param>
         /// <returns>result node value</returns>
         private dynamic GetValue(INode node)
         {
@@ -324,68 +340,124 @@ namespace DynamicSPARQLSpace
 
             return null;
         }
+
+        private string GetPrefixesString(IEnumerable<Prefix> prefixes)
+        {
+            prefixes = prefixes == null ? new Prefix[] { } : prefixes;
+            return (Prefixes.Concat(prefixes)).GetPrefixesString();
+        }
+
         /// <summary>
-        /// 
+        /// SPARQL Update (Delete/Insert)
         /// </summary>
         /// <typeparam name="T">type of elements</typeparam>
         /// <param name="prefixes">SPARQL prefixes</param>
         /// <param name="where">SPARQL "where" statement</param>
         /// <param name="delete">SPARQL "delete" statement</param>
         /// <param name="insert">SPARQL "insert" statement</param>
-        /// <returns></returns>
-        public void Update(
+         public void Update(
             IEnumerable<Prefix> prefixes = null,
             Group where = null,
             Group delete = null,
             Group insert = null)
         {
-
-            var updateFlag = where!=null ? 0x3 : ((delete==null ? 0 : 1)) | ((insert==null ? 0 : 1) << 1);
-            if (updateFlag == 0)
-                return;
-
-            prefixes = prefixes == null ? new Prefix[] { } : prefixes;
-            var prefixesStr = (Prefixes.Concat(prefixes)).GetPrefixesString();
+            var prefixesStr = GetPrefixesString(prefixes);
 
             string query = null;
 
-            if (updateFlag == 1)
+
+            string deletestr = string.Empty, insertstr = string.Empty, wherestr = string.Empty;
+            if (delete != null)
+            {
+                delete.NoBrackets = false;
+                deletestr = "DELETE " + delete.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
+            }
+                    
+            if (insert != null) 
+            {
+                insert.NoBrackets = false;
+                insertstr = "INSERT " + insert.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
+            }
+
+            if (where != null)
+            {
+                where.NoBrackets = false;
+                wherestr = "WHERE " + where.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
+            }
+                
+            LastQueryPrint = query = new[] { prefixesStr, deletestr, insertstr, wherestr }.Join2String(string.Empty);
+            
+
+            UpdateFunc(query);            
+        }
+        /// <summary>
+        /// SPARQL Update (DELETE DATA & DELETE WHERE)
+        /// </summary>
+        /// <param name="prefixes">SPARQL prefixes</param>
+        /// <param name="where">SPARQL "where" statement</param>
+        /// <param name="delete">SPARQL "delete" statement</param>
+        public void Delete(
+            IEnumerable<Prefix> prefixes = null,
+            Group where = null,
+            Group delete = null)
+        {
+
+            if (where != null && delete != null)
+            {
+                Update(prefixes,where,delete,null);
+                return;
+            }
+
+            var prefixesStr = GetPrefixesString(prefixes);
+            string query = string.Empty;
+
+            if (delete != null)
             {
                 delete.NoBrackets = false;
                 var deletestr = "DELETE DATA " + delete.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
-                query = new[] {prefixesStr, deletestr}.Join2String(Environment.NewLine);
+                LastQueryPrint = query = new[] { prefixesStr, deletestr }.Join2String(Environment.NewLine);
+                UpdateFunc(query);
+                return;
             }
-            else if (updateFlag == 2)
+
+            if (where!=null)
+            {
+                where.NoBrackets = false;
+                var deletestr = "DELETE WHERE " + where.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
+                LastQueryPrint = query = new[] { prefixesStr, deletestr }.Join2String(Environment.NewLine);
+                UpdateFunc(query);
+                return;
+            }
+        }
+        /// <summary>
+        /// SPARQL Update (INSERT DATA)
+        /// </summary>
+        /// <param name="prefixes">SPARQL prefixes</param>
+        /// <param name="where">SPARQL "where" statement</param>
+        /// <param name="insert">SPARQL "insert" statement</param>
+        public void Insert(
+            IEnumerable<Prefix> prefixes = null,
+            Group where = null,
+            Group insert = null)
+        {
+
+            if (where != null && insert != null)
+            {
+                Update(prefixes, where, null, insert);
+                return;
+            }
+
+            var prefixesStr = GetPrefixesString(prefixes);
+            string query = string.Empty;
+
+            if (insert != null)
             {
                 insert.NoBrackets = false;
                 var insertstr = "INSERT DATA " + insert.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
-                query = new[] {prefixesStr, insertstr }.Join2String(Environment.NewLine);
+                LastQueryPrint = query = new[] { prefixesStr, insertstr }.Join2String(Environment.NewLine);
+                UpdateFunc(query);
+                return;
             }
-            else if (updateFlag == 3)
-            {
-                string deletestr = string.Empty, insertstr = string.Empty, wherestr = string.Empty;
-                if (delete != null)
-                {
-                    delete.NoBrackets = false;
-                    deletestr = "DELETE " + delete.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
-                }
-                    
-                if (insert != null) 
-                {
-                    insert.NoBrackets = false;
-                    insertstr = "INSERT " + insert.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
-                }
-
-                if (where != null)
-                {
-                    where.NoBrackets = false;
-                    wherestr = "WHERE " + where.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
-                }
-                
-                query = new[] { prefixesStr, deletestr, insertstr, wherestr }.Join2String(string.Empty);
-            }
-
-            UpdateQueryingFunc(query);            
         }
     }
    
