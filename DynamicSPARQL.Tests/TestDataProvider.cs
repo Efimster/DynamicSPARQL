@@ -23,8 +23,9 @@ namespace DynamicSPARQLSpace.Tests
 
             Func<string, SparqlResultSet> sendSPARQLQuery = 
                 xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
-            Action<string> updateSPARQL = uquery => {
+            Func<string,object> updateSPARQL = uquery => {
                 processor.ProcessCommandSet(new SparqlUpdateParser().ParseFromString(uquery));
+                return 0;
             };
 
             dynamic dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, 

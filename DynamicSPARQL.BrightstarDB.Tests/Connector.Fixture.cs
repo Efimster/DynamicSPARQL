@@ -12,9 +12,9 @@ namespace DynamicSPARQLSpace.BrightstarDB.Tests
 {
     public class ConnectoreFixture
     {
-        private IBrightstarService client;
+        private BrightstarDB.Connector brightstarConnector;
 
-        [Fact(DisplayName = "Brightstar Connector Test"),Xunit.Trait("BrightstarDB connector", "")]
+        [Fact(DisplayName = "Get Quering Function"), Xunit.Trait("BrightstarDB connector", "")]
         public void BrightstarConnectorTest()
         {
             string storeName = null;
@@ -22,7 +22,8 @@ namespace DynamicSPARQLSpace.BrightstarDB.Tests
             try
             {
                 storeName = GenerateTestStore();
-                var func = Connector.GetQueringFunction("type=embedded;storesdirectory=brightstar;storename=" + storeName);
+                brightstarConnector = new Connector("type=embedded;storesdirectory=brightstar;storename=" + storeName);
+                var func = brightstarConnector.GetQueringFunction();
 
                 var dyno = DynamicSPARQL.CreateDyno(func, autoquotation: true);
 
@@ -39,14 +40,14 @@ namespace DynamicSPARQLSpace.BrightstarDB.Tests
             }
             finally
             {
-                if (client!=null && storeName!=null)
-                    client.DeleteStore(storeName);
+                if (brightstarConnector.Client!=null)
+                    brightstarConnector.Client.DeleteStore(brightstarConnector.StoreName);
             }
         }
 
         private string GenerateTestStore()
         {
-            client = BrightstarService.GetClient("type=embedded;storesdirectory=brightstar;");
+            var client = BrightstarService.GetClient("type=embedded;storesdirectory=brightstar;");
             string storeName = "Store_" + Guid.NewGuid();
             client.CreateStore(storeName);
             
@@ -60,6 +61,63 @@ namespace DynamicSPARQLSpace.BrightstarDB.Tests
 
 
             return storeName;
+        }
+
+        [Fact(DisplayName = "Get Update Function"), Xunit.Trait("BrightstarDB connector", "")]
+        public void BrightstarGetUpdateFunction()
+        {
+            string storeName = null;
+
+            try
+            {
+                storeName = "UpdStore_" + Guid.NewGuid();
+                brightstarConnector = new Connector("type=embedded;storesdirectory=brightstar;storename=" + storeName);
+                brightstarConnector.Client.CreateStore(storeName);
+
+                var updFunc = brightstarConnector.GetUpdateFunction();
+                var queryFunc = brightstarConnector.GetQueringFunction();
+
+                var dyno = DynamicSPARQL.CreateDyno(queryingFunc: queryFunc, updateFunc: updFunc, autoquotation: false);
+
+                var updres = dyno.Insert(
+                   prefixes: new[] {
+                        SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/")
+                    },
+                   insert: SPARQL.Triple(s: "<http://example/book1>", p: new[] { @"dc:title ""David Copperfield""",
+                                                                                  @"dc:creator ""Edmund Wells""",
+                                                                                  "dc:price 42"})
+                );
+
+                ((IJobInfo)updres).JobCompletedOk.Should().Be.True();
+
+
+                IEnumerable<dynamic> res = dyno.Select(
+                    projection: "?s ?p ?o",
+                    where: SPARQL.Triple("?s ?p ?o")
+                );
+
+                var list = res.ToList();
+                list.Count.Should().Equal(3);
+                list.Where(x => x.p == "price" && x.o == 42).Count().Should().Equal(1);
+                list.Where(x => x.p == "title" && x.o == "David Copperfield").Count().Should().Equal(1);
+                list.Where(x => x.p == "creator" && x.o == "Edmund Wells").Count().Should().Equal(1);
+
+                dyno.Delete(
+                    where: SPARQL.Triple(s: "<http://example/book1>", p: "?property ?value" )
+                );
+
+                res = dyno.Select(
+                   projection: "?s ?p ?o",
+                   where: SPARQL.Triple("?s ?p ?o")
+                );
+                
+                res.ToList().Count.Should().Equal(0);
+            }
+            finally
+            {
+                if (brightstarConnector.Client != null)
+                    brightstarConnector.Client.DeleteStore(brightstarConnector.StoreName);
+            }
         }
     }
 }

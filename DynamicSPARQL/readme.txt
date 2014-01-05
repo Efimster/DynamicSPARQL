@@ -100,7 +100,7 @@ see other examles within unit tests.
 CreateDyno parameters:
  
  queringFunc - Function (Func<string, SparqlResultSet>) for SPARQL querying of RDF source 
- updateFunc - Function (Action<string>) for SPARQL Update.  
+ updateFunc - Function (Func<string,object>) for SPARQL Update.  
  autoquotation - true: automatically adds missed quotes. Avoid use with regular expression filtering and strings contained whitespace.
  treatUri - true: result uri will be treated (fragment or last segment)
  prefixes - predefined prefixes
@@ -126,8 +126,8 @@ CreateDyno parameters:
 
 SPARQL Update:
 
-1)Create function for update RDF source that takes update query string.
-   Action<string> UpdateFunc;
+1)Create function for update RDF source that takes update query string
+   Func<string, object> UpdateFunc;
 2) Create a dynamic object 
     dynamic dyno = DynamicSPARQL.CreateDyno(.., updateFunc,...);
 3) Make a query

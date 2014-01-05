@@ -1,26 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using BrightstarDB;
 using BrightstarDB.Client;
-using VDS.RDF.Query;
-using System.Text.RegularExpressions;
 using HelperExtensionsLibrary.IEnumerable;
+using VDS.RDF.Query;
 
 namespace DynamicSPARQLSpace.BrightstarDB
 {
-    public static class Connector
+    public class Connector
     {
-        public static Func<string, SparqlResultSet> GetQueringFunction(string connectionString)
-        {
-            var client = BrightstarService.GetClient(connectionString);
-            string storeName = Regex.Match(connectionString, @"storename=[\w-]+").Value.Split('=')[1];
 
+        public IBrightstarService Client { get; private set; }
+        public string StoreName { get; private set; }
+
+        public Connector(string connectionString)
+        {
+            Client = BrightstarService.GetClient(connectionString);
+            StoreName = Regex.Match(connectionString, @"storename=[\w-]+").Value.Split('=')[1];
+        }
+
+        /// <summary>
+        /// Constructs querying function for BrightstarDB
+        /// </summary>
+        /// <returns>Querying function</returns>
+        public Func<string, SparqlResultSet> GetQueringFunction()
+        {
             Func<string, SparqlResultSet> queringFunction = xquery =>
             {
                 var settings = new XmlReaderSettings();
@@ -29,7 +37,7 @@ namespace DynamicSPARQLSpace.BrightstarDB
                 settings.IgnoreWhitespace = true;
 
                 XmlDocument doc = new XmlDocument();
-                var reader = XmlReader.Create(client.ExecuteQuery(storeName, xquery, resultsFormat: SparqlResultsFormat.Xml), settings);
+                var reader = XmlReader.Create(Client.ExecuteQuery(StoreName, xquery, resultsFormat: SparqlResultsFormat.Xml), settings);
                 var root = XElement.Load(reader, LoadOptions.None);
                 foreach (XElement XE in root.DescendantsAndSelf())
                 {
@@ -67,6 +75,21 @@ namespace DynamicSPARQLSpace.BrightstarDB
             return queringFunction;
 
         }
+        /// <summary>
+        /// Constructs Update function for BrightstarDB
+        /// </summary>
+        /// <returns>Update function</returns>
+        public Func<string, object> GetUpdateFunction()
+        {
+            Func<string, IJobInfo> func = query =>
+            {
+                return Client.ExecuteUpdate(StoreName, query);
+            };
 
+            return func;
+
+        }
     }
+
+    
 }
