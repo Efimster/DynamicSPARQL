@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Efimster")]
 [assembly: AssemblyProduct("DynamicSPARQL")]
-[assembly: AssemblyCopyright("Copyright 2013 (c) Efimster https://github.com/Efimster")]
+[assembly: AssemblyCopyright("Copyright 2014 (c) Efimster https://github.com/Efimster")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
