@@ -40,7 +40,7 @@ namespace DynamicSPARQLSpace.Tests
 
             var list = res.ToList();
             list.Count.Should().Equal(2);
-            list.First().Price.Should().Equals(42);
+            list.First().Price.Should().Equal(42m);
         }
 
         public class Book

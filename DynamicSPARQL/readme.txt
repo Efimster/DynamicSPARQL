@@ -101,10 +101,11 @@ CreateDyno parameters:
  
  queringFunc - Function (Func<string, SparqlResultSet>) for SPARQL querying of RDF source 
  updateFunc - Function (Func<string,object>) for SPARQL Update.  
- autoquotation - true: automatically adds missed quotes. Avoid use with regular expression filtering and strings contained whitespace.
+ autoquotation - true: automatically adds missed quotes. Avoid use with regular expression filtering.
  treatUri - true: result uri will be treated (fragment or last segment)
  prefixes - predefined prefixes
-
+ skipTriplesWithEmptyObject - Defines whether to skip triples with empty object
+ mindAsterisk - Determines whether to interpret '?*' as 'some variable' (don't care which one)
 
  Typed projection:
 

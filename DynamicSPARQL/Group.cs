@@ -38,13 +38,14 @@ namespace DynamicSPARQLSpace
         public WhreItemType ItemType { get { return WhreItemType.Group; } }
 
 
-        public virtual StringBuilder AppendToString(StringBuilder sb, bool autoQuotation = false)
+        public virtual StringBuilder AppendToString(StringBuilder sb, bool autoQuotation = false,
+            bool skipTriplesWithEmptyObject = false, bool mindAsterisk = false)
         {
             if (!NoBrackets)
                 sb.AppendLine("{");
             foreach (IWhereItem item in Items)
             {
-                sb = item.AppendToString(sb, autoQuotation);
+                sb = item.AppendToString(sb, autoQuotation, skipTriplesWithEmptyObject, mindAsterisk);
             }
 
             if (!NoBrackets)

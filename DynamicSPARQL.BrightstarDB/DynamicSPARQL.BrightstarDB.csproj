@@ -38,10 +38,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\BrightstarDB.1.5.2.0\lib\net40\dotNetRDF.dll</HintPath>
     </Reference>
-    <Reference Include="HelperExtensionsLibrary, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\HelperExtensionsLibrary.1.0.0.3\lib\net45\HelperExtensionsLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\BrightstarDB.1.5.2.0\lib\net40\HtmlAgilityPack.dll</HintPath>

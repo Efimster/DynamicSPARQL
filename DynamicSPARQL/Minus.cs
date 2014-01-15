@@ -13,10 +13,11 @@ namespace DynamicSPARQLSpace
 
         public new WhreItemType ItemType { get { return WhreItemType.Minus; } }
 
-        public override StringBuilder AppendToString(StringBuilder sb,bool autoQuotation = false)
+        public override StringBuilder AppendToString(StringBuilder sb,bool autoQuotation = false,
+            bool skipTriplesWithEmptyObject = false, bool mindAsterisk = false)
         {
             sb.Append("MINUS ");
-            return base.AppendToString(sb, autoQuotation);
+            return base.AppendToString(sb, autoQuotation, skipTriplesWithEmptyObject, mindAsterisk);
         }
     }
 }

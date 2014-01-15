@@ -48,7 +48,7 @@ namespace DynamicSPARQLSpace.Tests
 
             Assert.IsType<int>(x.o);
             int i = x.o;
-            i.Should().Equals(1);
+            i.Should().Equal(1);
 
             list = dyno.Select(
                     projection: "?s ?o",
@@ -59,7 +59,7 @@ namespace DynamicSPARQLSpace.Tests
 
             Assert.IsType<int>(x.o);
             i = x.o;
-            i.Should().Equals(-65000);
+            i.Should().Equal(-65000);
 
             list = dyno.Select(
                     projection: "?s ?o",
@@ -70,7 +70,7 @@ namespace DynamicSPARQLSpace.Tests
 
             Assert.IsType<int>(x.o);
             i = x.o;
-            i.Should().Equals(-5);
+            i.Should().Equal(-5);
 
             list = dyno.Select(
                     projection: "?s ?o",
@@ -81,7 +81,7 @@ namespace DynamicSPARQLSpace.Tests
 
             Assert.IsType<int>(x.o);
             i = x.o;
-            i.Should().Equals(-100);
+            i.Should().Equal(-100);
         }
 
         [Fact(DisplayName = "TripleWithDateTime"), Xunit.Trait("SPARQL Query", "typed"),]
@@ -95,7 +95,7 @@ namespace DynamicSPARQLSpace.Tests
             dynamic x = list.First();
 
             Assert.IsType<DateTime>(x.o);
-            ((DateTime)x.o).Should().Equals(new DateTime(2005, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+            ((DateTime)x.o).Should().Equal(new DateTime(2005, 1, 1, 1, 0, 0, DateTimeKind.Utc));
 
             list = dyno.Select(
                projection: "?s ?o",
@@ -105,7 +105,7 @@ namespace DynamicSPARQLSpace.Tests
             x = list.First();
 
             Assert.IsType<DateTime>(x.o);
-            ((DateTime)x.o).Should().Equals(new DateTime(2004, 12, 31));
+            ((DateTime)x.o).Should().Equal(new DateTime(2004, 12, 31));
 
         }
 
@@ -120,7 +120,7 @@ namespace DynamicSPARQLSpace.Tests
             dynamic x = list.First();
 
             Assert.IsType<bool>(x.o);
-            ((bool)x.o).Should().Equals(true);
+            ((bool)x.o).Should().Equal(true);
 
 
         }
@@ -136,7 +136,7 @@ namespace DynamicSPARQLSpace.Tests
 
             Assert.IsType<long>(x.o);
             long i = x.o;
-            i.Should().Equals(-1999999);
+            i.Should().Equal(-1999999L);
 
             list = dyno.Select(
                     projection: "?s ?o",
@@ -146,7 +146,44 @@ namespace DynamicSPARQLSpace.Tests
             x = list.First();
 
             Assert.IsType<ulong>(x.o);
-            ((ulong)x.o).Should().Equals(3000000);
+            ((ulong)x.o).Should().Equal(3000000UL);
+        }
+
+        [Fact(DisplayName = "Triple ToString"), Xunit.Trait("Triple", "")]
+        public void TestTripleToString()
+        {
+            var triple = SPARQL.Triple(" ?x    ?y    ?z  ");
+            var str = triple.ToString(autoQuotation: false, skipTriplesWithEmptyObject: false, mindAsterisk: false);
+            str.Should().Equal("?x ?y ?z .");
+
+            triple = SPARQL.Triple(" ?x  ?y  literal");
+            str = triple.ToString(autoQuotation: true, skipTriplesWithEmptyObject: false, mindAsterisk: false);
+            str.Should().Equal("?x ?y \"literal\" .");
+
+            triple = SPARQL.Triple(" <http://test.11.com/1/_/-/ddd/#>  ?y  next literal");
+            str = triple.ToString(autoQuotation: true, skipTriplesWithEmptyObject: false, mindAsterisk: false);
+            str.Should().Equal("<http://test.11.com/1/_/-/ddd/#> ?y \"next literal\" .");
+
+            triple = SPARQL.Triple(" ff:dd  ?y  111");
+            str = triple.ToString(autoQuotation: true, skipTriplesWithEmptyObject: false, mindAsterisk: false);
+            str.Should().Equal("ff:dd ?y 111 .");
+
+            triple = SPARQL.Triple(" 1^^xsd:integer  ?y  \"next literal\"");
+            str = triple.ToString(autoQuotation: true, skipTriplesWithEmptyObject: false, mindAsterisk: false);
+            str.Should().Equal("1^^xsd:integer ?y \"next literal\" .");
+
+            triple = SPARQL.Triple(" 1^^xsd:integer  ?y  <next literal>");
+            str = triple.ToString(autoQuotation: true, skipTriplesWithEmptyObject: false, mindAsterisk: false);
+            str.Should().Equal("1^^xsd:integer ?y \"<next literal>\" .");
+
+            triple = SPARQL.Triple(s:"ff:dd",p:new[] {"?y  \"literal\"", "?z literal next"});
+            str = triple.ToString(autoQuotation: true, skipTriplesWithEmptyObject: false, mindAsterisk: false);
+            str.Should().Equal("ff:dd ?y \"literal\"; ?z \"literal next\" .");
+
+            triple = SPARQL.Triple("?*  ?y  literal");
+            str = triple.ToString(autoQuotation: true, skipTriplesWithEmptyObject: false, mindAsterisk: true);
+            str.Should().Not.StartWith("?*");
+
         }
     }
 }

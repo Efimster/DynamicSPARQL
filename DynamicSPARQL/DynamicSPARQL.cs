@@ -4,7 +4,6 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using HelperExtensionsLibrary.ReflectionExtentions;
-using HelperExtensionsLibrary.Strings;
 using VDS.RDF;
 using VDS.RDF.Query;
 
@@ -38,6 +37,15 @@ namespace DynamicSPARQLSpace
         /// Print of last query
         /// </summary>
         public string LastQueryPrint { get; private set; }
+        /// <summary>
+        /// Defines whether to skip triples with empty object
+        /// </summary>
+        public bool SkipTriplesWithEmptyObject { get; private set; }
+        /// <summary>
+        ///  Determines whether to interpret '?*' as 'some variable' (don't care which one)
+        /// </summary>
+        public bool MindAsterisk { get; private set; }
+
 
         /// <summary>
         /// Creates dynamic object for SPARQL querying
@@ -47,15 +55,20 @@ namespace DynamicSPARQLSpace
         /// <param name="autoquotation">true: automatically adds missed quotes</param>
         /// <param name="treatUri">true: result uri will be treated (fragment or last segment)</param>
         /// <param name="prefixes">Predefined prefixes</param>
+        /// <param name="skipTriplesWithEmptyObject">Defines whether to skip triples with empty object</param>
+        /// <param name="mindAsterisk">Determines whether to interpret '?*' as 'some variable' (don't care which one)</param>
         /// <returns>DynamicSPARQL object</returns>
         public static dynamic CreateDyno(
             Func<string, SparqlResultSet> queryingFunc, 
             Func<string,object> updateFunc = null,
             bool autoquotation = false, 
             bool treatUri = true, 
-            IEnumerable<Prefix> prefixes = null)
+            IEnumerable<Prefix> prefixes = null,
+            bool skipTriplesWithEmptyObject = false,
+            bool mindAsterisk = false)
         {
-            return (dynamic)(new DynamicSPARQL(queryingFunc, updateFunc,autoquotation, treatUri, prefixes));
+            return (dynamic)(new DynamicSPARQL(queryingFunc, updateFunc,autoquotation, treatUri, prefixes, 
+                skipTriplesWithEmptyObject, mindAsterisk));
         }
 
         private DynamicSPARQL(
@@ -63,13 +76,17 @@ namespace DynamicSPARQLSpace
             Func<string,object> updateQueringFunc,
             bool autoquotation = false,
             bool treatUri = true,
-            IEnumerable<Prefix> prefixes = null)
+            IEnumerable<Prefix> prefixes = null,
+            bool skipTriplesWithEmptyObject = false,
+            bool mindAsterisk = false)
         {
             QueryingFunc = queringFunc;
             UpdateFunc = updateQueringFunc;
             AutoQuotation = autoquotation;
             TreatUri = treatUri;
             Prefixes = prefixes == null ? new List<Prefix>(5) : new List<Prefix>(prefixes);
+            SkipTriplesWithEmptyObject = skipTriplesWithEmptyObject;
+            MindAsterisk = mindAsterisk;
         }
 
         /// <summary>
@@ -209,7 +226,7 @@ namespace DynamicSPARQLSpace
             
             projection = string.Concat("SELECT", " ", string.IsNullOrEmpty(projection) ? "*" : projection);
             orderBy = !string.IsNullOrEmpty(orderBy) ? "ORDER BY " + orderBy : string.Empty;
-            var wherestr = "WHERE " + where.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
+            var wherestr = "WHERE " + where.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
             limit = !string.IsNullOrEmpty(limit) ? "LIMIT " + limit : string.Empty;
             offset = !string.IsNullOrEmpty(offset) ? "OFFSET " + offset : string.Empty;
             groupBy = !string.IsNullOrEmpty(groupBy) ? "GROUP BY " + groupBy : string.Empty;
@@ -217,7 +234,7 @@ namespace DynamicSPARQLSpace
             prefixes = prefixes == null ? new Prefix[] {} : prefixes;
             var prefixesStr = (Prefixes.Concat(prefixes)).GetPrefixesString();
 
-            string query = new[] { prefixesStr, projection, wherestr, groupBy, having, orderBy, limit, offset }.Join2String(Environment.NewLine);
+            string query = string.Join(Environment.NewLine, new[] { prefixesStr, projection, wherestr, groupBy, having, orderBy, limit, offset});
 
 
             if (typeof(T).FullName == "System.Object")
@@ -371,22 +388,22 @@ namespace DynamicSPARQLSpace
             if (delete != null)
             {
                 delete.NoBrackets = false;
-                deletestr = "DELETE " + delete.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
+                deletestr = "DELETE " + delete.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
             }
                     
             if (insert != null) 
             {
                 insert.NoBrackets = false;
-                insertstr = "INSERT " + insert.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
+                insertstr = "INSERT " + insert.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
             }
 
             if (where != null)
             {
                 where.NoBrackets = false;
-                wherestr = "WHERE " + where.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
+                wherestr = "WHERE " + where.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
             }
                 
-            LastQueryPrint = query = new[] { prefixesStr, deletestr, insertstr, wherestr }.Join2String(string.Empty);
+            LastQueryPrint = query = string.Join(string.Empty, new[] { prefixesStr, deletestr, insertstr, wherestr });
             
 
             return UpdateFunc(query);            
@@ -412,16 +429,16 @@ namespace DynamicSPARQLSpace
             if (delete != null)
             {
                 delete.NoBrackets = false;
-                var deletestr = "DELETE DATA " + delete.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
-                LastQueryPrint = query = new[] { prefixesStr, deletestr }.Join2String(Environment.NewLine);
+                var deletestr = "DELETE DATA " + delete.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
+                LastQueryPrint = query = string.Join(Environment.NewLine, new[] { prefixesStr, deletestr });
                 return UpdateFunc(query);
             }
 
             if (where!=null)
             {
                 where.NoBrackets = false;
-                var deletestr = "DELETE WHERE " + where.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
-                LastQueryPrint = query = new[] { prefixesStr, deletestr }.Join2String(Environment.NewLine);
+                var deletestr = "DELETE WHERE " + where.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
+                LastQueryPrint = query = string.Join(Environment.NewLine, new[] { prefixesStr, deletestr });
                 return UpdateFunc(query);
             }
 
@@ -449,13 +466,15 @@ namespace DynamicSPARQLSpace
             if (insert != null)
             {
                 insert.NoBrackets = false;
-                var insertstr = "INSERT DATA " + insert.AppendToString(new StringBuilder(), autoQuotation: AutoQuotation).ToString();
-                LastQueryPrint = query = new[] { prefixesStr, insertstr }.Join2String(Environment.NewLine);
+                var insertstr = "INSERT DATA " + insert.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
+                LastQueryPrint = query = string.Join(Environment.NewLine, new[] { prefixesStr, insertstr });
                 return UpdateFunc(query);
             }
 
             return 0;
         }
+
+        
     }
    
 }

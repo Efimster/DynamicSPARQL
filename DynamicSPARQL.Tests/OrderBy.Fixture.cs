@@ -39,7 +39,7 @@ namespace DynamicSPARQLSpace.Tests
 
             var list = res.ToList();
             list.Count.Should().Equal(2);
-            ((int)list.First().price).Should().Equals(42);
+            ((int)list.First().price).Should().Equal(42);
 
         }
     }

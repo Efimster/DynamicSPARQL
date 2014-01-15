@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HelperExtensionsLibrary.Strings;
+
 
 namespace DynamicSPARQLSpace
 {
@@ -21,7 +21,7 @@ namespace DynamicSPARQLSpace
         /// <returns>triple</returns>
         public static Triple Triple(string s = null, dynamic p = null, dynamic o = null)
         {
-            return new Triple() { Subject = s, Property = p, Object = o };
+            return new Triple(s, p, o );
         }
         /// <summary>
         /// Makes triple
@@ -30,11 +30,11 @@ namespace DynamicSPARQLSpace
         /// <returns>triple</returns>
         public static Triple Triple(string triple)
         {
-            IList<string> list = triple.SplitExt(" ").ToArray();
-            if (list.Count != 3)
-                throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
+            IList<string> list = triple.Split(new []{' '}, 3,StringSplitOptions.RemoveEmptyEntries);
+            //if (list.Count < 3)
+            //    throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
             
-            return new Triple() { Subject = list[0], Property = list[1], Object = list[2] };
+            return new Triple(list[0], list[1], list[2] );
         }
         /// <summary>
         /// Makes a group graph pattern
@@ -55,7 +55,7 @@ namespace DynamicSPARQLSpace
         public static Optional Optional(string s = null, string p = null, string o = null)
         {
             var optional = new Optional();
-            optional.Items = new[] { new Triple { Subject = s, Property = p, Object = o } };
+            optional.Items = new[] { new Triple(s, p, o) };
             return optional;
         }
         /// <summary>
@@ -65,9 +65,9 @@ namespace DynamicSPARQLSpace
         /// <returns>optional graph pattern</returns>
         public static Optional Optional(string triple)
         {
-            IList<string> list = triple.SplitExt(" ").ToArray();
-            if (list.Count != 3)
-                throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
+            IList<string> list = triple.Split(new []{' '}, 3,StringSplitOptions.RemoveEmptyEntries);
+            //if (list.Count != 3)
+            //    throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
 
             return Optional ( s: list[0], p: list[1], o: list[2] );
         }
@@ -125,7 +125,7 @@ namespace DynamicSPARQLSpace
         /// <returns>Prefix</returns>
         public static Prefix Prefix(string prefix, string iri)
         {
-            if (prefix.IsEmpty())
+            if (string.IsNullOrEmpty(prefix))
                 prefix = ":";
 
             else if (prefix[prefix.Length - 1] != ':')
@@ -161,7 +161,7 @@ namespace DynamicSPARQLSpace
         public static Minus Minus(string s = null, string p = null, string o = null)
         {
             var minus = new Minus();
-            minus.Items = new[] { new Triple { Subject = s, Property = p, Object = o } };
+            minus.Items = new[] { new Triple(s, p, o) };
             return minus;
         }
         /// <summary>
@@ -171,9 +171,9 @@ namespace DynamicSPARQLSpace
         /// <returns>"MINUS" filter expression</returns>
         public static Minus Minus(string triple)
         {
-            IList<string> list = triple.SplitExt(" ").ToArray();
-            if (list.Count != 3)
-                throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
+            IList<string> list = triple.Split(new []{' '}, 3,StringSplitOptions.RemoveEmptyEntries);
+            //if (list.Count != 3)
+            //    throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
 
             return Minus(s: list[0], p: list[1], o: list[2]);
         }
@@ -197,7 +197,7 @@ namespace DynamicSPARQLSpace
         public static Exists Exists(string s = null, string p = null, string o = null)
         {
             var exists = new Exists();
-            exists.Items = new[] { new Triple { Subject = s, Property = p, Object = o } };
+            exists.Items = new[] { new Triple(s, p, o) };
             return exists;
         }
         /// <summary>
@@ -207,9 +207,9 @@ namespace DynamicSPARQLSpace
         /// <returns>"EXISTS" filter expression</returns>
         public static Exists Exists(string triple)
         {
-            IList<string> list = triple.SplitExt(" ").ToArray();
-            if (list.Count != 3)
-                throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
+            IList<string> list = triple.Split(new []{' '}, 3,StringSplitOptions.RemoveEmptyEntries);
+            //if (list.Count != 3)
+            //    throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
 
             return Exists(s: list[0], p: list[1], o: list[2]);
         }
@@ -232,7 +232,7 @@ namespace DynamicSPARQLSpace
         public static NotExists NotExists(string s = null, string p = null, string o = null)
         {
             var notExists = new NotExists();
-            notExists.Items = new[] { new Triple { Subject = s, Property = p, Object = o } };
+            notExists.Items = new[] { new Triple(s, p, o) };
             return notExists;
         }
         /// <summary>
@@ -242,9 +242,9 @@ namespace DynamicSPARQLSpace
         /// <returns>"NOT EXISTS" filter expression</returns>
         public static NotExists NotExists(string triple)
         {
-            IList<string> list = triple.SplitExt(" ").ToArray();
-            if (list.Count != 3)
-                throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
+            IList<string> list = triple.Split(new []{' '}, 3,StringSplitOptions.RemoveEmptyEntries);
+            //if (list.Count != 3)
+            //    throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
 
             return NotExists(s: list[0], p: list[1], o: list[2]);
         }
@@ -272,7 +272,7 @@ namespace DynamicSPARQLSpace
             
             for (int i = 0; i < chain.Length-1; i+=2 )
             {
-                triples.Add(new Triple() {Subject = chain[i+0], Property = chain[i+1], Object = chain[i+2]});
+                triples.Add(new Triple(chain[i+0], chain[i+1], chain[i+2]));
             }
 
             return new Group(noBrackets:true) { Items = triples };
@@ -284,7 +284,7 @@ namespace DynamicSPARQLSpace
         /// <returns>triple group. No brackets</returns>
         public static Group TripleChain(string chain)
         {
-            return TripleChain(chain.SplitExt(" ").ToArray());
+            return TripleChain(chain.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries));
         }
 
 
@@ -303,6 +303,37 @@ namespace DynamicSPARQLSpace
             }
 
             return sb.ToString();
+        }
+
+        public static string MindAsterisk(this string str)
+        {
+            int idx = 0;
+            string res = string.Empty;
+
+            while((idx = str.IndexOf("?*"))>=0)
+            {
+                res += str.Substring(0, idx) + "?"+NewStringGuid();
+                str = str.Substring(idx + 2);
+            }
+
+            res += str;
+
+            return res;
+        }
+
+        public static string ToString(this Group group, bool autoQuotation,
+            bool skipTriplesWithEmptyObject, bool mindAsterisk)
+        {
+            return group.AppendToString(new StringBuilder(), 
+                autoQuotation: autoQuotation, 
+                skipTriplesWithEmptyObject:skipTriplesWithEmptyObject,
+                mindAsterisk:mindAsterisk).ToString();
+        }
+
+        public static string NewStringGuid(bool noDashes = true)
+        {
+            return noDashes ? Guid.NewGuid().ToString().Replace("-", string.Empty) : Guid.NewGuid().ToString();
+
         }
 
 

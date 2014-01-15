@@ -22,14 +22,15 @@ namespace DynamicSPARQLSpace
 
         public new WhreItemType ItemType { get { return WhreItemType.Union; } }
 
-        public override StringBuilder AppendToString(StringBuilder sb, bool autoQuotation = false)
+        public override StringBuilder AppendToString(StringBuilder sb, bool autoQuotation = false,
+            bool skipTriplesWithEmptyObject = false, bool mindAsterisk = false)
         {
             if (Right == null)
                 throw new MissingMemberException("Union right part is missing");
             
-            sb = Left.AppendToString(sb, autoQuotation);
+            sb = Left.AppendToString(sb, autoQuotation, skipTriplesWithEmptyObject, mindAsterisk);
             sb.AppendLine("UNION");
-            Right.AppendToString(sb, autoQuotation);
+            Right.AppendToString(sb, autoQuotation, skipTriplesWithEmptyObject, mindAsterisk);
 
             return sb;
         }

@@ -245,5 +245,80 @@ namespace DynamicSPARQLSpace.Tests
             list.Where(x => x.o == "mailto:bill@example" && x.p == "mbox").Count().Should().Equal(1);
  
         }
+
+       
+        [Theory(DisplayName = "Mind Asterisk"),
+         Xunit.Trait("SPARQL Update", ""),
+         InlineData(@"@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+
+                    <http://example/william> a foaf:Person .
+                    <http://example/william> foaf:givenName ""William"" .
+                    <http://example/william> foaf:mbox  <mailto:bill@example> .
+
+                    <http://example/fred> a foaf:Person .
+                    <http://example/fred> foaf:givenName ""Fred"" .
+                    <http://example/fred> foaf:mbox  <mailto:fred@example> .")]
+        public void TestDeleteWhere3(string data)
+        {
+            var dyno = TestDataProvider.GetDyno(data, autoquotation: true, mindAsterisk:true);
+
+            dyno.Delete(
+                prefixes: new[] {
+                    SPARQL.Prefix("foaf", "http://xmlns.com/foaf/0.1/")
+                },
+                where: SPARQL.Triple(s: "?person", p: new[] { "foaf:givenName Fred", "?* ?*" })
+            );
+
+            ((string)dyno.LastQueryPrint).Should().Contain("DELETE WHERE");
+
+            IEnumerable<dynamic> res = dyno.Select(
+                    projection: "?s ?p ?o",
+                    where: SPARQL.Triple("?s ?p ?o")
+            );
+
+
+            var list = res.ToList();
+            list.Count.Should().Equal(3);
+            list.Where(x => x.o == "William" && x.p == "givenName").Count().Should().Equal(1);
+            list.Where(x => x.o == "mailto:bill@example" && x.p == "mbox").Count().Should().Equal(1);
+
+        }
+
+        [Theory(DisplayName = "Skip Triples With Empty Object"),
+         Xunit.Trait("SPARQL Update", ""),
+         InlineData(@"@prefix dc: <http://purl.org/dc/elements/1.1/> .
+                @prefix ns: <http://example.org/ns#> .
+
+                <http://example/book1> ns:price 42 .")]
+        public void TestInsertData2(string data)
+        {
+            var dyno = TestDataProvider.GetDyno(data, autoquotation: false, skipTriplesWithEmptyObject: true);
+
+            dyno.Insert(
+                prefixes: new[] {
+                    SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/")
+                },
+                insert:SPARQL.Group( 
+                        SPARQL.Triple(s: "<http://example/book1>", p:@"dc:title", o: @""""""),
+                        SPARQL.Triple(s: "<http://example/book1>", p:@"dc:creator", o: @"""Edmund Wells""")
+                    )
+            );
+
+
+            IEnumerable<dynamic> res = dyno.Select(
+                    projection: "?s ?p ?o",
+                    where: SPARQL.Triple("?s ?p ?o")
+            );
+
+            ((string)dyno.LastQueryPrint).Should().Contain("INSERT DATA");
+            var list = res.ToList();
+            list.Count.Should().Equal(2);
+            list.Where(x => x.p == "price" && x.o == 42).Count().Should().Equal(1);
+            list.Where(x => x.p == "title").Count().Should().Equal(0);
+            list.Where(x => x.p == "creator" && x.o == "Edmund Wells").Count().Should().Equal(1);
+
+
+        }
+
     }
 }

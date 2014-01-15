@@ -16,7 +16,8 @@ namespace DynamicSPARQLSpace
             get { return WhreItemType.Bind; }
         }
 
-        public StringBuilder AppendToString(StringBuilder sb, bool autoQuotation = false)
+        public StringBuilder AppendToString(StringBuilder sb, bool autoQuotation = false,
+            bool skipTriplesWithEmptyObject = false, bool mindAsterisk = false)
         {
             string str = BIND;
             return sb.AppendLine(Regex.IsMatch(BIND, @"\(([^)]*)\)$") ? string.Concat("BIND ", str, " .") : string.Concat("BIND (", str, ") ."));

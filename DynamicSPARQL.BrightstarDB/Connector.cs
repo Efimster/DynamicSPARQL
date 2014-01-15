@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using BrightstarDB;
 using BrightstarDB.Client;
-using HelperExtensionsLibrary.IEnumerable;
+//using HelperExtensionsLibrary.IEnumerable;
 using VDS.RDF.Query;
 
 namespace DynamicSPARQLSpace.BrightstarDB
@@ -45,12 +45,12 @@ namespace DynamicSPARQLSpace.BrightstarDB
                     XE.ReplaceAttributes((from xattrib in XE.Attributes().Where(xa => !xa.IsNamespaceDeclaration) select new XAttribute(xattrib.Name.LocalName, xattrib.Value)));
                 }
                 var sp = root.Elements().Where(x => x.Name.LocalName == "head").First();
-                sp.Elements().ForEach(el =>
+                foreach (var el in sp.Elements())
                 {
                     var name = el.Attribute("name").Value;
                     el.RemoveAttributes();
                     el.Value = name;
-                });
+                }
 
                 sp.ReplaceWith(new XElement("variables", sp.Elements()));
 
@@ -62,7 +62,9 @@ namespace DynamicSPARQLSpace.BrightstarDB
                 var mem = new MemoryStream();
                 var writer = XmlWriter.Create(mem, settings2);
 
-                root.Elements().ForEach(el => el.WriteTo(writer));
+                foreach (var el in root.Elements())
+                    el.WriteTo(writer);
+
                 writer.Dispose();
                 mem.Seek(0, SeekOrigin.Begin);
 

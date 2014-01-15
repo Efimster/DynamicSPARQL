@@ -35,7 +35,7 @@ namespace DynamicSPARQLSpace.Tests
 
             var list = res.ToList();
             list.Count.Should().Equal(1);
-            ((int)list.First().total).Should().Equals(10);
+            ((int)list.First().total).Should().Equal(10);
 
         }
 
