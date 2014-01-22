@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DynamicSPARQL")]
-[assembly: AssemblyDescription("Helps making SPARQ queries to RDF sources")]
+[assembly: AssemblyDescription("Dynamically scaffolds SPARQL queries")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Efimster")]
 [assembly: AssemblyProduct("DynamicSPARQL")]
