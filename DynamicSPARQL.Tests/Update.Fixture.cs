@@ -296,13 +296,17 @@ namespace DynamicSPARQLSpace.Tests
 
             dyno.Insert(
                 prefixes: new[] {
-                    SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/")
+                    SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/"),
+                    SPARQL.Prefix("book", "http://example/")
                 },
                 insert:SPARQL.Group( 
-                        SPARQL.Triple(s: "<http://example/book1>", p:@"dc:title", o: @""""""),
-                        SPARQL.Triple(s: "<http://example/book1>", p:@"dc:creator", o: @"""Edmund Wells""")
+                        SPARQL.Triple(s: "book:book1", p:@"dc:title", o: @""""""),
+                        SPARQL.Triple(s: "book:book1", p:@"dc:creator", o: @"""Edmund Wells"""),
+                        SPARQL.Triple(s: "book:c2091b57-8d96-45da-ad81-157f9630cd5f", p:new[]{"prop:name \"\"", "prop:concern \"\""})
                     )
             );
+
+            //{{predicate:c2091b57-8d96-45da-ad81-157f9630cd5f prop:name ""; prop:concern "" .}}
 
 
             IEnumerable<dynamic> res = dyno.Select(

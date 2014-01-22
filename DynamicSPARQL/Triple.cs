@@ -84,19 +84,30 @@ namespace DynamicSPARQLSpace
                 return sb;
             }
             
-            IList prop = Property as IList;
-            if (prop != null && prop.Count > 0)
+            var prop = Property as IEnumerable<string>;
+            if (prop != null /*&& prop.Count > 0*/)
             {
-                sb.Append(subject + " ");
+                var propWithObjList = prop.Select(x => x.Split(separator, 2, StringSplitOptions.RemoveEmptyEntries));
+                
+                if (skipTriplesWithEmptyObject)
+                    propWithObjList = propWithObjList.Where(x => !IsEmptyLiteral(x[1]));
 
-                foreach (string propObj in prop)
+                var list = propWithObjList.Select(x => 
+                    Tuple.Create(ApplyGems(x[0], false, mindAsterisk), ApplyGems(x[1], autoQuotation, mindAsterisk))).ToList();
+
+                if (list.Count == 0)
+                    return sb;
+
+                if (list.Count == 1)
                 {
-                    var arr = propObj.Split(separator, 2, StringSplitOptions.RemoveEmptyEntries);
-                    property = ApplyGems(arr[0], false, mindAsterisk);
-                    obj = ApplyGems(arr[1], autoQuotation, mindAsterisk);
-                    if (!skipTriplesWithEmptyObject || !IsEmptyLiteral(obj))
-                        sb.Append(string.Concat(property, " ", obj, PROPERTY_DELIMITER));
+                    return sb.Append(string.Concat(subject, " ", list[0].Item1, " ", list[0].Item2, " ."));
                 }
+
+                sb.Append(subject + " ");
+                               
+                foreach (var item in list)
+                    sb.Append(string.Concat(item.Item1, " ", item.Item2, PROPERTY_DELIMITER));
+                
 
                 sb.Remove(sb.Length - PROPERTY_DELIMITER.Length, PROPERTY_DELIMITER.Length);
                 sb.Append(" .");
