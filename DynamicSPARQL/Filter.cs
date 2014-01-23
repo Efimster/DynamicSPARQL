@@ -21,7 +21,8 @@ namespace DynamicSPARQLSpace
             bool skipWithEmptyObject = false, bool mindAsterisk = false)
         {
             string str = autoQuotation ? FILTER.AutoquoteSPARQL() : FILTER;
-            return sb.AppendLine(Regex.IsMatch(FILTER, @"\(([^)]*)\)$") ? string.Concat("FILTER ", str, " .") : string.Concat("FILTER (", str, ") ."));
+            //return sb.AppendLine(Regex.IsMatch(FILTER, @"\(([^)]*)\)$") ? string.Concat("FILTER ", str, " .") : string.Concat("FILTER (", str, ") ."));
+            return sb.AppendLine(string.Concat("FILTER (", str, ") ."));
         }
     }
 }

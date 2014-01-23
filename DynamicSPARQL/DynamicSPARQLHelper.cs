@@ -290,7 +290,8 @@ namespace DynamicSPARQLSpace
 
         public static string AutoquoteSPARQL(this string val)
         {
-            return System.Text.RegularExpressions.Regex.Replace(val, "((?<![:\"])\\b)(?!(\\d+|exists|not|a)\\b)(?<!\\?)\\w+(?![:\\(])\\b", "\"$&\"");
+            return System.Text.RegularExpressions.Regex.Replace(val, "((?<![:\"])\\b)(?!(\\d+|exists|not|a|in)\\b)(?<!\\?)\\w+(?![:\\(])\\b", "\"$&\"",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         }
 
         public static string GetPrefixesString(this IEnumerable<Prefix> prefixes)

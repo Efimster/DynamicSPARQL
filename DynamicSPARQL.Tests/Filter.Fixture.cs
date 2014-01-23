@@ -13,7 +13,7 @@ namespace DynamicSPARQLSpace.Tests
     public class FilterFixture
     {
         [Theory(DisplayName = "Filtering(Restricting the Value of Strings) "),
-         Xunit.Trait("SPARQL Query", ""),
+         Xunit.Trait("SPARQL Query", "Filtering"),
          InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
                 @prefix :     <http://example.org/book/> .
                 @prefix ns:   <http://example.org/ns#> .
@@ -61,7 +61,7 @@ namespace DynamicSPARQLSpace.Tests
         }
 
         [Theory(DisplayName = "Filtering(Restricting Numeric Values) "),
-         Xunit.Trait("SPARQL Query", ""),
+         Xunit.Trait("SPARQL Query", "Filtering"),
          InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
                 @prefix :     <http://example.org/book/> .
                 @prefix ns:   <http://example.org/ns#> .
@@ -90,6 +90,38 @@ namespace DynamicSPARQLSpace.Tests
             var list = res.ToList();
             list.Count.Should().Equal(1);
             list.Any(x => x.title == "The Semantic Web" && x.price == 23).Should().Be.True();
+        }
+
+        [Theory(DisplayName = "Filtering - variable equels to IRI "),
+ Xunit.Trait("SPARQL Query", "Filtering"),
+ InlineData(@"@prefix dc:   <http://purl.org/dc/elements/1.1/> .
+                @prefix :     <http://example.org/book/> .
+                @prefix ns:   <http://example.org/ns#> .
+
+                :book1  dc:title  ""SPARQL Tutorial"" .
+                :book1  ns:price  42 .
+                :book2  dc:title  ""The Semantic Web"" .
+                :book2  ns:price  23 .")]
+        public void TestFilter3(string data)
+        {
+            var dyno = TestDataProvider.GetDyno(data);
+
+            IEnumerable<dynamic> res = dyno.Select(
+                prefixes: new[] { 
+                    SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/"),
+                    SPARQL.Prefix("ns", "http://example.org/ns#"),
+                    SPARQL.Prefix("book", "http://example.org/book/"),
+                },
+                projection: "?price",
+                where: SPARQL.Group(
+                    SPARQL.Triple("?x ns:price ?price"),
+                    SPARQL.Filter("?x IN (book:book1)")
+                )
+            );
+
+            var list = res.ToList();
+            list.Count.Should().Equal(1);
+            list.Any(x => x.price == 42).Should().Be.True();
         }
     }
 }
