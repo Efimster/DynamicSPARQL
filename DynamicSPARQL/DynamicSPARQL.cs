@@ -118,6 +118,11 @@ namespace DynamicSPARQLSpace
                         
 
             IEnumerable<Prefix> prefixes = null;
+            From from = null;
+            Using usingClause = null;
+            With with = null;
+            IEnumerable<FromNamed> fromNamed = null;
+            IEnumerable<UsingNamed> usingNamed = null;
             string projection = string.Empty;
             Group where = null;
             string orderBy = string.Empty;
@@ -163,19 +168,36 @@ namespace DynamicSPARQLSpace
                     case "having":
                         having = args[i].ToString();
                         break;
+                    case "from":
+                        from = new From((string)args[i]);
+                        break;
+                    case "using":
+                        usingClause = new Using((string)args[i]);
+                        break;
+                    case "with":
+                        with = new With((string)args[i]);
+                        break;
+                    case "fromnamed":
+                        fromNamed = FromNamed.Parse(args[i]);
+                        break;
+                    case "usingnamed":
+                        usingNamed = UsingNamed.Parse(args[i]);
+                        break;
+
                 }
             }
 
             
             if (op=="select")
             {
-                result = Select<dynamic>(prefixes, projection, where, orderBy, groupBy, having, limit, offset);
+                result = Select<dynamic>(prefixes, projection, where, orderBy, groupBy, having, limit, offset, 
+                    from, fromNamed);
                 return true;
             }
 
 
             if (op == "update")
-                result = Update(prefixes, where, delete, insert);
+                result = Update(prefixes, where, delete, insert, with:with, usingClause:usingClause, usingNamed:usingNamed);
             else if (op == "delete")
                 result = Delete(prefixes, where, delete);
             else if (op == "insert")
@@ -217,7 +239,9 @@ namespace DynamicSPARQLSpace
             string groupBy = null, 
             string having = null, 
             string limit = null, 
-            string offset = null)
+            string offset = null,
+            From from = null,
+            IEnumerable<FromNamed> fromNamed = null)
         {
             if (where == null)
                 where = new Group();
@@ -232,9 +256,11 @@ namespace DynamicSPARQLSpace
             groupBy = !string.IsNullOrEmpty(groupBy) ? "GROUP BY " + groupBy : string.Empty;
             having = !string.IsNullOrEmpty(having) ? string.Concat("HAVING (",having,")") : string.Empty;
             prefixes = prefixes == null ? new Prefix[] {} : prefixes;
-            var prefixesStr = (Prefixes.Concat(prefixes)).GetPrefixesString();
+            var prefixesStr = Prefix.Collection2String((Prefixes.Concat(prefixes)));
+            var fromStr = from != null ? from.ToString() : string.Empty;
+            var fromNamedStr = FromNamed.Collection2String(fromNamed);
 
-            string query = string.Join(Environment.NewLine, new[] { prefixesStr, projection, wherestr, groupBy, having, orderBy, limit, offset});
+            string query = string.Join(Environment.NewLine, new[] { prefixesStr, projection, fromStr, fromNamedStr, wherestr, groupBy, having, orderBy, limit, offset});
 
 
             if (typeof(T).FullName == "System.Object")
@@ -362,7 +388,7 @@ namespace DynamicSPARQLSpace
         private string GetPrefixesString(IEnumerable<Prefix> prefixes)
         {
             prefixes = prefixes == null ? new Prefix[] { } : prefixes;
-            return (Prefixes.Concat(prefixes)).GetPrefixesString();
+            return Prefix.Collection2String((Prefixes.Concat(prefixes)));
         }
 
         /// <summary>
@@ -377,7 +403,11 @@ namespace DynamicSPARQLSpace
             IEnumerable<Prefix> prefixes = null,
             Group where = null,
             Group delete = null,
-            Group insert = null)
+            Group insert = null,
+            With with = null,
+            Using usingClause = null,
+            IEnumerable<UsingNamed> usingNamed = null
+             )
         {
             var prefixesStr = GetPrefixesString(prefixes);
 
@@ -402,9 +432,13 @@ namespace DynamicSPARQLSpace
                 where.NoBrackets = false;
                 wherestr = "WHERE " + where.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
             }
+
+            var withstr = with != null ? with.ToString() : string.Empty;
+            var usingstr = usingClause != null ? usingClause.ToString() : string.Empty;
+            var usingNamedStr = usingNamed != null ? UsingNamed.Collection2String(usingNamed) : string.Empty;
                 
-            LastQueryPrint = query = string.Join(string.Empty, new[] { prefixesStr, deletestr, insertstr, wherestr });
-            
+            LastQueryPrint = query = string.Join(string.Empty, new[] { prefixesStr, withstr, deletestr, insertstr, 
+                usingstr, usingNamedStr, wherestr });
 
             return UpdateFunc(query);            
         }

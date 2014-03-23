@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DynamicSPARQL")]
-[assembly: AssemblyDescription("Dynamically scaffolds SPARQL queries")]
+[assembly: AssemblyDescription("Dynamically scaffolds SPARQL queries. Please visit project wiki pages https://github.com/Efimster/DynamicSPARQL/wiki")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Efimster")]
 [assembly: AssemblyProduct("DynamicSPARQL")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.1.4")]
-[assembly: AssemblyFileVersion("1.0.1.4")]
+[assembly: AssemblyVersion("1.0.1.5")]
+[assembly: AssemblyFileVersion("1.0.1.5")]

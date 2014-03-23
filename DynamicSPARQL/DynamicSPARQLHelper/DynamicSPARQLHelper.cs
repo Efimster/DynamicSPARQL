@@ -10,7 +10,7 @@ namespace DynamicSPARQLSpace
     /// <summary>
     /// Helps creating of SPARQL
     /// </summary>
-    public static class SPARQL
+    public static partial class SPARQL
     {
         /// <summary>
         /// Makes triple
@@ -45,41 +45,7 @@ namespace DynamicSPARQLSpace
         {
             return new Group { Items = Items };
         }
-        /// <summary>
-        /// Makes an optional graph pattern
-        /// </summary>
-        /// <param name="s">Subject of first triple</param>
-        /// <param name="p">Predicate of first triple</param>
-        /// <param name="o">Object of first triple</param>
-        /// <returns>optional graph pattern</returns>
-        public static Optional Optional(string s = null, string p = null, string o = null)
-        {
-            var optional = new Optional();
-            optional.Items = new[] { new Triple(s, p, o) };
-            return optional;
-        }
-        /// <summary>
-        /// Makes an optional graph pattern
-        /// </summary>
-        /// <param name="triple">first triple</param>
-        /// <returns>optional graph pattern</returns>
-        public static Optional Optional(string triple)
-        {
-            IList<string> list = triple.Split(new []{' '}, 3,StringSplitOptions.RemoveEmptyEntries);
-            //if (list.Count != 3)
-            //    throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
-
-            return Optional ( s: list[0], p: list[1], o: list[2] );
-        }
-        /// <summary>
-        /// Makes an optional graph pattern
-        /// </summary>
-        /// <param name="items">optional graph pattern items</param>
-        /// <returns>optional graph pattern</returns>
-        public static Optional Optional(params IWhereItem[] items)
-        {
-            return new Optional { Items = items };
-        }
+ 
         /// <summary>
         /// Makes Union graph pattern
         /// </summary>
@@ -150,41 +116,6 @@ namespace DynamicSPARQLSpace
         public static Bind Bind(string bind)
         {
             return new Bind { BIND = bind };
-        }
-        /// <summary>
-        /// Makes a "MINUS" filter expression
-        /// </summary>
-        /// <param name="s">Subject of first triple</param>
-        /// <param name="p">Predicate of first triple</param>
-        /// <param name="o">Object of first triple</param>
-        /// <returns>"MINUS" filter expression</returns>
-        public static Minus Minus(string s = null, string p = null, string o = null)
-        {
-            var minus = new Minus();
-            minus.Items = new[] { new Triple(s, p, o) };
-            return minus;
-        }
-        /// <summary>
-        /// Makes an "MINUS" filter expression
-        /// </summary>
-        /// <param name="triple">first triple</param>
-        /// <returns>"MINUS" filter expression</returns>
-        public static Minus Minus(string triple)
-        {
-            IList<string> list = triple.Split(new []{' '}, 3,StringSplitOptions.RemoveEmptyEntries);
-            //if (list.Count != 3)
-            //    throw new ArgumentException("triple should consist of three items separated by whitespaces", "triple");
-
-            return Minus(s: list[0], p: list[1], o: list[2]);
-        }
-        /// <summary>
-        /// Makes a "MINUS" filter expression
-        /// </summary>
-        /// <param name="items">items</param>
-        /// <returns>"MINUS" filter expression</returns>
-        public static Minus Minus(params IWhereItem[] items)
-        {
-            return new Minus { Items = items };
         }
 
         /// <summary>
@@ -288,39 +219,6 @@ namespace DynamicSPARQLSpace
         }
 
 
-        public static string AutoquoteSPARQL(this string val)
-        {
-            return System.Text.RegularExpressions.Regex.Replace(val, "((?<![:\"])\\b)(?!(\\d+|exists|not|a|in)\\b)(?<!\\?)\\w+(?![:\\(])\\b", "\"$&\"",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-        }
-
-        public static string GetPrefixesString(this IEnumerable<Prefix> prefixes)
-        {
-            var sb = new StringBuilder();
-
-            foreach (var prefix in prefixes)
-            {
-                sb = prefix.AppendToString(sb);
-            }
-
-            return sb.ToString();
-        }
-
-        public static string MindAsterisk(this string str)
-        {
-            int idx = 0;
-            string res = string.Empty;
-
-            while((idx = str.IndexOf("?*"))>=0)
-            {
-                res += str.Substring(0, idx) + "?"+NewStringGuid();
-                str = str.Substring(idx + 2);
-            }
-
-            res += str;
-
-            return res;
-        }
 
         public static string ToString(this Group group, bool autoQuotation,
             bool skipTriplesWithEmptyObject, bool mindAsterisk)
@@ -331,11 +229,7 @@ namespace DynamicSPARQLSpace
                 mindAsterisk:mindAsterisk).ToString();
         }
 
-        public static string NewStringGuid(bool noDashes = true)
-        {
-            return noDashes ? Guid.NewGuid().ToString().Replace("-", string.Empty) : Guid.NewGuid().ToString();
 
-        }
 
 
     }

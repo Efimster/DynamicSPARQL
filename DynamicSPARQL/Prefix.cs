@@ -11,9 +11,26 @@ namespace DynamicSPARQLSpace
         public string PREFIX { get; set; }
         public string IRI { get; set; }
 
-        public StringBuilder AppendToString(StringBuilder sb)
+        public override string ToString()
         {
-            return sb.AppendLine(string.Concat("PREFIX ", PREFIX, " <", IRI, ">"));
+            return string.Concat("PREFIX ", PREFIX, " <", IRI, ">");
+        }
+
+        public static string Collection2String(IEnumerable<Prefix> list)
+        {
+            if (list == null)
+                return string.Empty;
+
+            var sb = new StringBuilder();
+
+            foreach (var prefix in list)
+            {
+                var str = prefix.ToString();
+                if (!string.IsNullOrEmpty(str))
+                    sb.AppendLine(str);
+            }
+
+            return sb.ToString();
         }
     }
 }

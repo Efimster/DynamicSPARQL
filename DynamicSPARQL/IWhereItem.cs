@@ -22,6 +22,7 @@ namespace DynamicSPARQLSpace
         Minus,
         Exists,
         NotExists,
+        Graph,
         None
     }
 }

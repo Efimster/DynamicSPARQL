@@ -16,18 +16,34 @@ namespace DynamicSPARQLSpace.Tests
         public static dynamic GetDyno(string data, bool autoquotation = true, 
             bool treatUri = true,
             bool skipTriplesWithEmptyObject = false,
-            bool mindAsterisk = false)
+            bool mindAsterisk = false,
+            bool useStore = false,
+            string defaultGraphUri = "http://test.org/defaultgraph")
         {
-            var graph = new Graph();
-            graph.LoadFromString(data);
-            var processor = new LeviathanUpdateProcessor(new InMemoryDataset(graph));
+            InMemoryDataset dataset;
+            Func<string, SparqlResultSet> sendSPARQLQuery;
             
+            if (useStore)
+            {
+                var store = new VDS.RDF.TripleStore();
+                dataset = new InMemoryDataset(store, new Uri(defaultGraphUri));
 
+                store.LoadFromString(data);
+                var queryProcessor = new LeviathanQueryProcessor(dataset);
+                sendSPARQLQuery =  xquery => queryProcessor.ProcessQuery(new SparqlQueryParser().ParseFromString(xquery)) as SparqlResultSet;
+            }
+            else
+            {
+                var graph = new VDS.RDF.Graph();
+                graph.LoadFromString(data);
+                dataset = new InMemoryDataset(graph);
+                sendSPARQLQuery = xquery => graph.ExecuteQuery(new SparqlQueryParser().ParseFromString(xquery)) as SparqlResultSet;
+            }
+            
+            var updProcessor = new LeviathanUpdateProcessor(dataset);
 
-            Func<string, SparqlResultSet> sendSPARQLQuery = 
-                xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
             Func<string,object> updateSPARQL = uquery => {
-                processor.ProcessCommandSet(new SparqlUpdateParser().ParseFromString(uquery));
+                updProcessor.ProcessCommandSet(new SparqlUpdateParser().ParseFromString(uquery));
                 return 0;
             };
 

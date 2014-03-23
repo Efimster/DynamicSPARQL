@@ -205,8 +205,6 @@ namespace DynamicSPARQLSpace.Tests
             list.Count.Should().Equal(8);
             list.Where(x => x.p == "mbox2").Count().Should().Equal(1);
             list.Where(x => x.p == "name2").Count().Should().Equal(2);
-
-
         }
 
         [Theory(DisplayName = "DELETE WHERE"),
