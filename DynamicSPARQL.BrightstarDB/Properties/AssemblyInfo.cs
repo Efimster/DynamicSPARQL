@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DynamicSPARQL BrightstarDB connector")]
-[assembly: AssemblyDescription("DynamicSPARQL connector for BrightstarDB")]
+[assembly: AssemblyDescription("DynamicSPARQL BrightstarDB connector binds BrightstarDB with DynamicSPARQL")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Efimster")]
 [assembly: AssemblyProduct("DynamicSPARQL.BrightstarDB")]
-[assembly: AssemblyCopyright("Copyright 2013 (c) Efimster https://github.com/Efimster")]
+[assembly: AssemblyCopyright("Copyright 2014 (c) Efimster https://github.com/Efimster")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

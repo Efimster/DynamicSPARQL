@@ -5,7 +5,7 @@ namespace DynamicSPARQLSpace
     public class FromNamed : From
     {
         public override string Clause { get { return "FROM NAMED"; } } 
-        private FromNamed(string iri) : base(iri)
+        public FromNamed(string iri) : base(iri)
         {}
 
         public static IEnumerable<FromNamed> Parse(object fromNamed)

@@ -259,8 +259,12 @@ namespace DynamicSPARQLSpace
             var prefixesStr = Prefix.Collection2String((Prefixes.Concat(prefixes)));
             var fromStr = from != null ? from.ToString() : string.Empty;
             var fromNamedStr = FromNamed.Collection2String(fromNamed);
+            
+            string query = string.Join(Environment.NewLine, new[] { prefixesStr, projection, fromStr, 
+                fromNamedStr, wherestr, groupBy, having, orderBy, limit, offset}
+                .Where(part => !string.IsNullOrEmpty(part)));
 
-            string query = string.Join(Environment.NewLine, new[] { prefixesStr, projection, fromStr, fromNamedStr, wherestr, groupBy, having, orderBy, limit, offset});
+            LastQueryPrint = query;
 
 
             if (typeof(T).FullName == "System.Object")
@@ -438,7 +442,7 @@ namespace DynamicSPARQLSpace
             var usingNamedStr = usingNamed != null ? UsingNamed.Collection2String(usingNamed) : string.Empty;
                 
             LastQueryPrint = query = string.Join(string.Empty, new[] { prefixesStr, withstr, deletestr, insertstr, 
-                usingstr, usingNamedStr, wherestr });
+                usingstr, usingNamedStr, wherestr }.Where(part => !string.IsNullOrEmpty(part)));
 
             return UpdateFunc(query);            
         }
@@ -464,7 +468,7 @@ namespace DynamicSPARQLSpace
             {
                 delete.NoBrackets = false;
                 var deletestr = "DELETE DATA " + delete.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
-                LastQueryPrint = query = string.Join(Environment.NewLine, new[] { prefixesStr, deletestr });
+                LastQueryPrint = query = string.Join(Environment.NewLine, new[] { prefixesStr, deletestr }.Where(part => !string.IsNullOrEmpty(part)));
                 return UpdateFunc(query);
             }
 
@@ -472,7 +476,7 @@ namespace DynamicSPARQLSpace
             {
                 where.NoBrackets = false;
                 var deletestr = "DELETE WHERE " + where.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
-                LastQueryPrint = query = string.Join(Environment.NewLine, new[] { prefixesStr, deletestr });
+                LastQueryPrint = query = string.Join(Environment.NewLine, new[] { prefixesStr, deletestr }.Where(part => !string.IsNullOrEmpty(part)));
                 return UpdateFunc(query);
             }
 
@@ -501,7 +505,7 @@ namespace DynamicSPARQLSpace
             {
                 insert.NoBrackets = false;
                 var insertstr = "INSERT DATA " + insert.ToString(AutoQuotation, SkipTriplesWithEmptyObject, MindAsterisk);
-                LastQueryPrint = query = string.Join(Environment.NewLine, new[] { prefixesStr, insertstr });
+                LastQueryPrint = query = string.Join(Environment.NewLine, new[] { prefixesStr, insertstr }.Where(part => !string.IsNullOrEmpty(part)));
                 return UpdateFunc(query);
             }
 
