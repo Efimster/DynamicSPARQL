@@ -28,8 +28,8 @@ namespace DynamicSPARQLSpace
         public void AddResult(SPARQLQueryResult result)
         {
             Results.Add(result);
-            foreach (var name in result.Bindings.Select(bind => bind.Name))
-                Variables.Add(name);
+            //foreach (var name in result.Bindings.Select(bind => bind.Name))
+            //    Variables.Add(name);
         }
 
 

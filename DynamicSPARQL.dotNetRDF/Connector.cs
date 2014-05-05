@@ -33,6 +33,9 @@ namespace DynamicSPARQLSpace.dotNetRDF
                 var dnRdfResultSet = queryProcessor.ProcessQuery(new SparqlQueryParser().ParseFromString(xquery)) as SparqlResultSet;
                 var results = new SPARQLQueryResults();
 
+                foreach (var dnRdfVariable in dnRdfResultSet.Variables)
+                    results.Variables.Add(dnRdfVariable);
+                
                 foreach (var dnRdfResult in dnRdfResultSet)
                 {
                     var result = new SPARQLQueryResult();

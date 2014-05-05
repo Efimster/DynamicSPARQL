@@ -28,15 +28,30 @@ namespace DynamicSPARQLSpace.BrightstarDB.Tests
                 var dyno = DynamicSPARQL.CreateDyno(func, autoquotation: true);
 
                 IEnumerable<dynamic> list = dyno.Select(
-                        projection: "?s ?p ?o",
-                        where: SPARQL.Group(SPARQL.Triple("?s ?p ?o"))
+                        projection: "?product ?p ?o ?level",
+                        where: SPARQL.Group(
+                            SPARQL.Triple("?product ?p ?o"),
+                            SPARQL.Optional(
+                                @"?product ""http://www.brightstardb.com/schemas/product/level"" ?level"
+                            )
+                        )
                 );
 
-                IList<string> result = list.Select(triple => (string)triple.o).ToList();
+                var resultList = list.ToList();
+
+                IList<string> result = resultList.Select(triple => (string)triple.o).ToList();
 
                 result.Should().Contain.One("nosql");
                 result.Should().Contain.One(".net");
                 result.Should().Contain.One("rdf");
+
+                ((object)resultList.First().level).Should().Be.Null();
+
+                
+            }
+            catch(Exception exc)
+            {
+                throw exc;
             }
             finally
             {

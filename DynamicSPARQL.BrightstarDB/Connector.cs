@@ -40,8 +40,20 @@ namespace DynamicSPARQLSpace.BrightstarDB
                 var reader = XmlReader.Create(Client.ExecuteQuery(StoreName, xquery, resultsFormat: SparqlResultsFormat.Xml), settings);
                 var root = XElement.Load(reader, LoadOptions.None);
                 var resultSet = new SPARQLQueryResults();
-                root = root.Elements().First(x => x.Name.LocalName.ToLower() == "results");
-                foreach (var resultElement in root.Elements())
+                
+                var head = root.Elements().First(x => x.Name.LocalName.ToLower() == "head");
+                foreach (var variableElement in head.Elements())
+                {
+                    if (variableElement.Name.LocalName.ToLower() != "variable")
+                        continue;
+
+                    var variable = variableElement.Attributes().FirstOrDefault(attr => attr.Name.LocalName.ToLower() == "name");
+                    if (variable!=null)
+                        resultSet.Variables.Add(variable.Value);
+                }
+
+                var results = root.Elements().First(x => x.Name.LocalName.ToLower() == "results");
+                foreach (var resultElement in results.Elements())
                 {
                     var result = new SPARQLQueryResult();
                     foreach (var bindingElement in resultElement.Elements())

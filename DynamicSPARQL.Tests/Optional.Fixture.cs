@@ -27,10 +27,11 @@ namespace DynamicSPARQLSpace.Tests
 
             IEnumerable<dynamic> res = dyno.Select(
                 prefixes: new[] { SPARQL.Prefix("foaf:", "http://xmlns.com/foaf/0.1/") },
-                projection: "?name ?mbox",
+                projection: "?name ?mbox ?surname",
                 where: SPARQL.Group(
                     SPARQL.Triple(s: "?x", p: "foaf:name", o: "?name"),
-                    SPARQL.Optional(s: "?x", p: "foaf:mbox", o: "?mbox")
+                    SPARQL.Optional(s: "?x", p: "foaf:mbox", o: "?mbox"),
+                    SPARQL.Optional(s: "?x", p: "foaf:surname", o: "?surname")
                 )
             );
 
@@ -41,6 +42,8 @@ namespace DynamicSPARQLSpace.Tests
             list.Where(x => x.name == "Alice" && x.mbox == "mailto:alice@example.com").Count().Should().Equal(1);
             list.Where(x => x.name == "Alice" && x.mbox == "mailto:alice@work.example").Count().Should().Equal(1);
             list.Where(x => x.name == "Bob" && x.mbox == null).Count().Should().Equal(1);
+
+            ((object)list.First().surname).Should().Be.Null();
 
         }
 
