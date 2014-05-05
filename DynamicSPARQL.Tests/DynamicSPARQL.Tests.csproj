@@ -40,7 +40,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Should">
       <HintPath>..\packages\Should.1.1.20\lib\Should.dll</HintPath>
@@ -103,6 +103,10 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DynamicSPARQL.dotNetRDF\DynamicSPARQL.dotNetRDF.csproj">
+      <Project>{d714655a-47dd-4a29-b889-42b7b6c3136d}</Project>
+      <Name>DynamicSPARQL.dotNetRDF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DynamicSPARQL\DynamicSPARQL.csproj">
       <Project>{bc9a6895-de27-41af-9ded-ca301a5bd6d6}</Project>
       <Name>DynamicSPARQL</Name>

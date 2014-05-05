@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DynamicSPARQL BrightstarDB connector")]
-[assembly: AssemblyDescription("DynamicSPARQL BrightstarDB connector binds BrightstarDB with DynamicSPARQL")]
+[assembly: AssemblyTitle("DynamicSPARQL dotNetRDF connector")]
+[assembly: AssemblyDescription("DynamicSPARQL dotNetRDF connector binds dotNetRDF with DynamicSPARQL")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Efimster")]
-[assembly: AssemblyProduct("DynamicSPARQL.BrightstarDB")]
+[assembly: AssemblyProduct("DynamicSPARQL.dotNetRDF")]
 [assembly: AssemblyCopyright("Copyright 2014 (c) Efimster https://github.com/Efimster")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("39aa5e8d-d229-4eb8-9768-7e9e1779b976")]
+[assembly: Guid("2f185a03-2143-4bcc-bccc-d5a369b015ff")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.2.1")]
-[assembly: AssemblyFileVersion("1.0.2.1")]
+[assembly: AssemblyVersion("1.0.0.1")]
+[assembly: AssemblyFileVersion("1.0.0.1")]

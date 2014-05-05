@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DynamicSPARQLSpace;
-using VDS.RDF;
-using VDS.RDF.Query;
-using Xunit;
-using Xunit.Extensions;
 using Should.Fluent;
+using Xunit.Extensions;
 
 namespace DynamicSPARQLSpace.Tests
 {

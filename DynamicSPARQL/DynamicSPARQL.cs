@@ -4,8 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using HelperExtensionsLibrary.ReflectionExtentions;
-using VDS.RDF;
-using VDS.RDF.Query;
+
 
 namespace DynamicSPARQLSpace
 {
@@ -24,7 +23,7 @@ namespace DynamicSPARQLSpace
         /// <summary>
         /// Quering function
         /// </summary>
-        public Func<string, SparqlResultSet> QueryingFunc { get; private set; }
+        public Func<string, SPARQLQueryResults> QueryingFunc { get; private set; }
         /// <summary>
         /// Predefined prefixes
         /// </summary>
@@ -59,7 +58,7 @@ namespace DynamicSPARQLSpace
         /// <param name="mindAsterisk">Determines whether to interpret '?*' as 'some variable' (don't care which one)</param>
         /// <returns>DynamicSPARQL object</returns>
         public static dynamic CreateDyno(
-            Func<string, SparqlResultSet> queryingFunc, 
+            Func<string, SPARQLQueryResults> queryingFunc, 
             Func<string,object> updateFunc = null,
             bool autoquotation = false, 
             bool treatUri = true, 
@@ -72,7 +71,7 @@ namespace DynamicSPARQLSpace
         }
 
         private DynamicSPARQL(
-            Func<string, SparqlResultSet> queringFunc,
+            Func<string, SPARQLQueryResults> queringFunc,
             Func<string,object> updateQueringFunc,
             bool autoquotation = false,
             bool treatUri = true,
@@ -291,16 +290,17 @@ namespace DynamicSPARQLSpace
             var resultSet = QueryingFunc(SPARQLQuery);
             LastQueryPrint = SPARQLQuery;
 
+            var variables = resultSet.Variables;
             foreach (var result in resultSet)
             {
                 IDictionary<string, object> item = new ExpandoObject();
-                foreach (var node in result)
+                foreach (var binding in result)
                 {
-                    var val = GetValue(node.Value);
-                    item[node.Key] = val;
+                    var val = GetValue(binding);
+                    item[binding.Name] = val;
                 }
 
-                foreach (var key in resultSet.Variables.Except(item.Keys))
+                foreach (var key in variables.Except(item.Keys))
                 {
                     item[key] = null;
                 }
@@ -324,10 +324,10 @@ namespace DynamicSPARQLSpace
                 T item = Activator.CreateInstance<T>();
                 dynamic dyno = new DynamicPropertiesObject<T>(item);
 
-                foreach (var node in result)
+                foreach (var binding in result)
                 {
-                    var val = GetValue(node.Value);
-                    dyno[node.Key] = val;
+                    var val = GetValue(binding);
+                    dyno[binding.Name] = val;
                 }
 
                 yield return item;
@@ -340,48 +340,48 @@ namespace DynamicSPARQLSpace
         /// </summary>
         /// <param name="node">Node</param>
         /// <returns>result node value</returns>
-        private dynamic GetValue(INode node)
+        private dynamic GetValue(ResultBinding node)
         {
-            if (node.NodeType == VDS.RDF.NodeType.Uri)
+            if (node.Type == BindingType.Iri)
             {
-                var uri = (node as IUriNode).Uri;
+                var uri = (node as IriBinding).Iri;
 
                 if (!TreatUri || string.IsNullOrEmpty(uri.LocalPath))
                     return uri.ToString();
-                
+
 
                 return string.IsNullOrEmpty(uri.Fragment) ? uri.Segments[uri.Segments.Length - 1] : uri.Fragment.Substring(1);
             }
-            else if (node.NodeType == VDS.RDF.NodeType.Literal)
+            else if (node.Type == BindingType.Literal)
             {
-                var val = node as ILiteralNode;
+                var val = node as LiteralBinding;
                 if (val.DataType == null)
-                    return val.Value; 
+                    return val.Literal;
 
                 switch (val.DataType.Fragment)
                 {
                     case "#nonPositiveInteger":
                     case "#negativeInteger":
                     case "#int":
-                    case "#integer": return int.Parse(val.Value);
-                    case "#boolean": return bool.Parse(val.Value);
-                    case "#decimal": return decimal.Parse(val.Value);
-                    case "#date": 
-                    case "#dateTime": return DateTime.Parse(val.Value);
-                    case "#double": return double.Parse(val.Value);
-                    case "#float": return float.Parse(val.Value);
+                    case "#integer": return int.Parse(val.Literal);
+                    case "#boolean": return bool.Parse(val.Literal);
+                    case "#decimal": return decimal.Parse(val.Literal);
+                    case "#date":
+                    case "#dateTime": return DateTime.Parse(val.Literal);
+                    case "#double": return double.Parse(val.Literal);
+                    case "#float": return float.Parse(val.Literal);
                     case "#positiveInteger":
                     case "#nonNegativeInteger":
-                    case "#unsignedInt": return uint.Parse(val.Value);
-                    case "#long": return long.Parse(val.Value);
-                    case "#short": return short.Parse(val.Value);
-                    case "#unsignedByte": 
-                    case "#byte": return byte.Parse(val.Value);
-                    case "#unsignedShort": return ushort.Parse(val.Value);
-                    case "#unsignedLong": return ulong.Parse(val.Value);
+                    case "#unsignedInt": return uint.Parse(val.Literal);
+                    case "#long": return long.Parse(val.Literal);
+                    case "#short": return short.Parse(val.Literal);
+                    case "#unsignedByte":
+                    case "#byte": return byte.Parse(val.Literal);
+                    case "#unsignedShort": return ushort.Parse(val.Literal);
+                    case "#unsignedLong": return ulong.Parse(val.Literal);
 
 
-                    default: return val.Value; 
+                    default: return val.Literal;
                 }
 
             }
@@ -389,6 +389,7 @@ namespace DynamicSPARQLSpace
             return null;
         }
 
+        
         private string GetPrefixesString(IEnumerable<Prefix> prefixes)
         {
             prefixes = prefixes == null ? new Prefix[] { } : prefixes;

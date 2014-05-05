@@ -27,9 +27,9 @@ namespace DynamicSPARQLSpace.BrightstarDB
         /// Constructs querying function for BrightstarDB
         /// </summary>
         /// <returns>Querying function</returns>
-        public Func<string, SparqlResultSet> GetQueringFunction()
+        public Func<string, SPARQLQueryResults> GetQueryingFunction()
         {
-            Func<string, SparqlResultSet> queringFunction = xquery =>
+            Func<string, SPARQLQueryResults> queringFunction = xquery =>
             {
                 var settings = new XmlReaderSettings();
                 settings.ConformanceLevel = ConformanceLevel.Auto;
@@ -39,39 +39,42 @@ namespace DynamicSPARQLSpace.BrightstarDB
                 XmlDocument doc = new XmlDocument();
                 var reader = XmlReader.Create(Client.ExecuteQuery(StoreName, xquery, resultsFormat: SparqlResultsFormat.Xml), settings);
                 var root = XElement.Load(reader, LoadOptions.None);
-                foreach (XElement XE in root.DescendantsAndSelf())
+                var resultSet = new SPARQLQueryResults();
+                root = root.Elements().First(x => x.Name.LocalName.ToLower() == "results");
+                foreach (var resultElement in root.Elements())
                 {
-                    XE.Name = XE.Name.LocalName;
-                    XE.ReplaceAttributes((from xattrib in XE.Attributes().Where(xa => !xa.IsNamespaceDeclaration) select new XAttribute(xattrib.Name.LocalName, xattrib.Value)));
+                    var result = new SPARQLQueryResult();
+                    foreach (var bindingElement in resultElement.Elements())
+                    {
+                        var valueElement = bindingElement.Elements().First();
+                        ResultBinding binding = null;
+                        if (valueElement.Name.LocalName.ToLower() == "literal")
+                        {
+                            var literalBinding = new LiteralBinding();
+                            literalBinding.Literal = valueElement.Value;
+                            binding = literalBinding;
+                            var attribute = valueElement.Attributes().FirstOrDefault(attr => attr.Name.LocalName.ToLower() == "datatype");
+                            if (attribute != null)
+                                literalBinding.DataType = new Uri(attribute.Value);
+                            attribute = valueElement.Attributes().FirstOrDefault(attr => attr.Name.LocalName.ToLower() == "lang");
+                            if (attribute != null)
+                                literalBinding.Language = attribute.Value;
+                            
+                        }
+                        else if (valueElement.Name.LocalName.ToLower() == "uri")
+                        {
+                            var iriBinding = new IriBinding();
+                            iriBinding.Iri = new Uri(valueElement.Value);
+                            binding = iriBinding;
+                        }
+                        binding.Name = bindingElement.Attributes().First(attr => attr.Name.LocalName.ToLower() == "name").Value;
+                        result.AddBinding(binding);
+                         
+                    }
+                    resultSet.AddResult(result);
                 }
-                var sp = root.Elements().Where(x => x.Name.LocalName == "head").First();
-                foreach (var el in sp.Elements())
-                {
-                    var name = el.Attribute("name").Value;
-                    el.RemoveAttributes();
-                    el.Value = name;
-                }
 
-                sp.ReplaceWith(new XElement("variables", sp.Elements()));
-
-                var settings2 = new XmlWriterSettings();
-                settings2.OmitXmlDeclaration = true;
-                settings2.NamespaceHandling = NamespaceHandling.OmitDuplicates;
-                settings2.ConformanceLevel = ConformanceLevel.Fragment;
-
-                var mem = new MemoryStream();
-                var writer = XmlWriter.Create(mem, settings2);
-
-                foreach (var el in root.Elements())
-                    el.WriteTo(writer);
-
-                writer.Dispose();
-                mem.Seek(0, SeekOrigin.Begin);
-
-                var result = new SparqlResultSet();
-                result.ReadXml(XmlReader.Create(mem, settings));
-
-                return result;
+                return resultSet;
             };
 
             return queringFunction;

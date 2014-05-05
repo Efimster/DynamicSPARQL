@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VDS.RDF;
-using VDS.RDF.Query;
-using VDS.RDF.Query.Filters;
-using VDS.RDF.Query.Ordering;
-using Xunit;
-using Xunit.Extensions;
 using Should.Fluent;
+using VDS.RDF;
+using VDS.RDF.Query.Datasets;
+using Xunit;
 
 namespace DynamicSPARQLSpace.Tests
 {
@@ -25,8 +20,10 @@ namespace DynamicSPARQLSpace.Tests
             store.LoadFromFile(path);
             var graph = store.Graphs.First();
 
-            Func<string, SparqlResultSet> sendSPARQLQuery = xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
-            dyno = DynamicSPARQL.CreateDyno(sendSPARQLQuery, autoquotation: true);
+            var connector = new DynamicSPARQLSpace.dotNetRDF.Connector(new InMemoryDataset(graph));
+
+            //Func<string, SparqlResultSet> sendSPARQLQuery = xquery => graph.ExecuteQuery(xquery) as SparqlResultSet;
+            dyno = DynamicSPARQL.CreateDyno(connector.GetQueryingFunction(), autoquotation: true);
 
             dyno.Prefixes = new[]{
                         SPARQL.Prefix(prefix:"rdf:", iri: "http://www.w3.org/1999/02/22-rdf-syntax-ns#" ),

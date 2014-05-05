@@ -23,7 +23,7 @@ namespace DynamicSPARQLSpace.BrightstarDB.Tests
             {
                 storeName = GenerateTestStore();
                 brightstarConnector = new Connector("type=embedded;storesdirectory=brightstar;storename=" + storeName);
-                var func = brightstarConnector.GetQueringFunction();
+                var func = brightstarConnector.GetQueryingFunction();
 
                 var dyno = DynamicSPARQL.CreateDyno(func, autoquotation: true);
 
@@ -75,7 +75,7 @@ namespace DynamicSPARQLSpace.BrightstarDB.Tests
                 brightstarConnector.Client.CreateStore(storeName);
 
                 var updFunc = brightstarConnector.GetUpdateFunction();
-                var queryFunc = brightstarConnector.GetQueringFunction();
+                var queryFunc = brightstarConnector.GetQueryingFunction();
 
                 var dyno = DynamicSPARQL.CreateDyno(queryingFunc: queryFunc, updateFunc: updFunc, autoquotation: false);
 
@@ -83,7 +83,7 @@ namespace DynamicSPARQLSpace.BrightstarDB.Tests
                    prefixes: new[] {
                         SPARQL.Prefix("dc", "http://purl.org/dc/elements/1.1/")
                     },
-                   insert: SPARQL.Triple(s: "<http://example/book1>", p: new[] { @"dc:title ""David Copperfield""",
+                   insert: SPARQL.Triple(s: "<http://example/book1>", p: new[] { @"dc:title ""David Copperfield""@fr",
                                                                                   @"dc:creator ""Edmund Wells""",
                                                                                   "dc:price 42"})
                 );

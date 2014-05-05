@@ -1,5 +1,3 @@
-DynamicSPARQL connector for BrightstarDB
-
-General use:
-	var func = Connector.GetQueringFunction("type=embedded;storesdirectory=brightstar;storename=" + storeName);
-	var dyno = DynamicSPARQL.CreateDyno(func);
+DynamicSPARQL BrightstarDB connector binds BrightstarDB with DynamicSPARQL. 
+Available through NuGet https://www.nuget.org/packages/DynamicSPARQL.BrightstarDB/
+Please visit project wiki pages https://github.com/Efimster/DynamicSPARQL/wiki 
